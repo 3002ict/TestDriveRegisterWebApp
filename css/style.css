@@ -1,0 +1,49 @@
+html,
+body {
+    width: 100%;
+}
+html {
+}
+body {
+    
+}
+
+.login-body{
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.profile-image-login{
+  height: 60%;
+  width: 60%;
+}
+
+.login-form {
+    width: 280px;
+    margin: 20px;
+}
+
+#login-page{
+  width: 340px;
+}
+
+.sign-in-btn{
+  width: 100%;
+  color: black;
+}
+
+#main-page{
+  width: 840px;
+}
+
+header, main, footer {
+      padding-left: 300px;
+    }
+
+@media only screen and (max-width : 992px) {
+  header, main, footer {
+    padding-left: 0;
+  }
+}

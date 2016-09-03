@@ -1,0 +1,88 @@
+<!--Header Nav-->
+<header>
+<!-- Dropdown Structure -->
+<!--<ul id='menuDropdown' class='dropdown-content'>-->
+<!--    <li><a href="javascript:void(0);" ng-click="signout()">Sign Out</a></li>-->
+<!--</ul>-->
+<nav class="purple darken-4 navbar-fixed" role="navigation">
+    <div class="nav-wrapper container">
+      <a href="#" class="button-collapse" data-activates="nav-mobile" data-sidenav="left" data-menuwidth="300" data-closeonclick="false">
+          <i class="material-icons">menu</i>
+      </a>
+      <a id="logo-container" href="javascript:void(0);" class="brand-logo hide-on-small-only">Test Drive Register</a>
+      
+      <!--<ul class="right">-->
+        <!-- Dropdown Trigger -->
+      <!--  <li><a class="dropdown-button" href="javascript:void(0);" data-activates="menuDropdown" dropdown><i class="material-icons">more_vert</i></a></li>-->
+      <!--</ul>-->
+    </div>
+</nav>
+</header>
+<main>
+
+<!--Fixed SideNav-->
+<ul id="nav-mobile" class="side-nav fixed">
+    <li><div class="userView">
+      <img class="background" src="images/bg_profile.png">
+      <a href="#!user"><img src="images/ic_account_circle.png" class="circle"></a>
+      <a href="#!name"><span class="white-text name">{{user.name}}</span></a>
+      <a href="#!email"><span class="white-text email">{{user.email}}</span></a>
+    </div></li>
+    <li><a href="#"><i class="material-icons">list</i>Database</a></li>
+    <li><div class="divider"></div></li>
+    <li><a href="#"><i class="material-icons">perm_identity</i>Users</a></li>
+    <li><div class="divider"></div></li>
+    <li><a href="#"><i class="material-icons">settings</i>Settings</a></li>
+    <li><div class="divider"></div></li>
+    <li><a href="#"><i class="material-icons">exit_to_app</i>Sign Out</a></li>
+    
+</ul>
+  
+<div class="row">
+    <div class="col s12 m6">
+      <div class="card">
+        <div class="card-content">
+            <span class="card-title">Test Drive Data:</span>
+            <ul class="collapsible popout" data-collapsible="accordion" watch>
+                <li ng-repeat="single in collapsibleElements">
+                    <div class="collapsible-header"><i class="{{single.icon}}"></i>{{single.title}}</div>
+                    <div class="collapsible-body">
+                        <p>
+                            Phone Number: {{single.phone}} <br>
+                            Email: {{single.email}} <br>
+                            License Number: {{single.licence}} <br>
+                            Maling Address: {{single.address}} <br>
+                        </p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="card-action">
+          <a href="#">Next</a>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m3">
+          <div class="card">
+            <div class="card-content">
+                <span class="card-title">Car Make:</span>
+                <canvas id="pie" class="chart chart-pie"
+                    chart-data="pi_data" chart-labels="pi_labels" chart-colors="pi_colors" chart-options="pi_options">
+                </canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col s12 m3">
+          <div class="card">
+            <div class="card-content">
+                <span class="card-title">Rating:</span>
+                <canvas id="bar" class="chart chart-bar"
+                  chart-data="rating_data" chart-labels="rating_labels" chart-options="rating_options" chart-series="rating_series">
+                </canvas>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+</main>

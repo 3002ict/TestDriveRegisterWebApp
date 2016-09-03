@@ -1,0 +1,32 @@
+<div class="login-body">
+<div id="login-page" class="row">
+    <div class="col s12 z-depth-4 card-panel">
+      <form class="login-form" ng-submit="signin()">
+        <div class="row">
+          <div class="input-field col s12 center">
+            <img src="images/login_logo.png" alt="" class="square responsive-img valign profile-image-login">
+          </div>
+        </div>
+        <div class="row margin">
+          <div class="input-field col s12">
+            <i class="material-icons prefix">perm_identity</i>
+            <input id="username" type="text" ng-model="email" required>
+            <label for="username" >Username</label>
+          </div>
+        </div>
+        <div class="row margin">
+          <div class="input-field col s12">
+            <i class="material-icons prefix">lock_outline</i>
+            <input id="password" type="password" ng-model="password" required>
+            <label for="password">Password</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12 center-align">
+            <button type="submit" class="waves-effect waves-light btn yellow accent-4 sign-in-btn">SIGN IN</button>
+          </div>
+        </div>
+      </form>
+    </div>
+</div>
+</div>

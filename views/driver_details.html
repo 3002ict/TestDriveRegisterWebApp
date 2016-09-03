@@ -1,0 +1,41 @@
+<div class="container">
+    <div class="header clearfix">
+        <nav class="navbar navbar-dark bg-primary">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span> 
+                  </button>
+                  <a class="navbar-brand" href="#">TestDriveRegister</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                  <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                  </ul>
+                  <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                  </ul>
+                </div>
+             </div>
+        </nav>
+    </div>
+    <div class="jumbotron start-jumbotron">
+        <h1>Driver Details</h1>
+        <p class="lead">Please fill in the form</p>
+        <form class="form-driver_details">
+            <label for="inputName" class="sr-only">Name</label>
+            <input type="text" id="inputName" class="form-control" placeholder="Driver Name" ng-model="drivername" required autofocus>
+            <label for="inputPhone" class="sr-only">Phone Number</label>
+            <input type="text" id="inputPhone" class="form-control" placeholder="Phone Number" ng-model="phone" required>
+            <label for="inputLicence" class="sr-only">Licence Number</label>
+            <input type="text" id="inputLicence" class="form-control" placeholder="Licence Number" ng-model="licence" required>
+            <label for="inputLicence" class="sr-only">Email</label>
+            <input type="text" id="inputEmail" class="form-control" placeholder="Email" ng-model="email" required>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="onClickDriverDetails">Next</button>
+        </form>
+    </div>
+</div>
