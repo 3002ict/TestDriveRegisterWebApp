@@ -1,0 +1,114 @@
+<!--Header-->
+<header ng-include="'views/parts/header.html'"></header>
+<main>
+<!-- Modal Structure for Edit -->
+<div id="addUserModal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <h4>Test Drive</h4>
+        <div class="row">
+          <form class="col s12">
+            <div class="row">
+              <div class="input-field col s12" input-field>
+                  <input class="validate" id="icon_prefix" type="text" ng-model="inputs.name">
+                  <label for="icon_prefix">Name</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="icon_prefix" type="text" class="validate" ng-model="inputs.phone">
+                <label for="icon_prefix">Phone Number</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="icon_prefix" type="text" class="validate" ng-model="inputs.email">
+                <label for="icon_prefix">Email</label>
+              </div>
+            </div>
+          </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:void(0);" ng-click="updateUser()" class=" modal-action modal-close waves-effect waves-green btn-flat">ADD</a>
+        <a href="javascript:void(0);" class=" modal-action modal-close waves-effect waves-green btn-flat">CANCEL</a>
+    </div>
+</div>
+<!-- Modal Structure for Delete -->
+<div id="deleteUserModal" class="modal">
+    <div class="modal-content">
+        <h4>Delete user</h4>
+        <div class="row">
+          Are you sure?
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:void(0);" ng-click="deleteUser(inputs)" class=" modal-action modal-close waves-effect waves-green btn-flat">DELETE</a>
+        <a href="javascript:void(0);" class=" modal-action modal-close waves-effect waves-green btn-flat">CANCEL</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12 m8">
+      <div class="card">
+        <div class="card-content">
+          <!-- Modal Trigger -->
+          <div class="col right">
+              <a class="btn-floating waves-effect waves-light" ><i class="material-icons">add</i></a>
+          </div>        
+            <div class="row">
+              <span class="card-title">Users:</span>
+            </div>
+            <div class="row center" ng-show="preLoad">
+              <div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-blue">
+                  <div class="circle-clipper left">
+                    <div class="circle"></div>
+                  </div><div class="gap-patch">
+                    <div class="circle"></div>
+                  </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <ul class="collapsible popout" data-collapsible="accordion" watch>
+                <li ng-repeat="single in users">
+                    <div class="collapsible-header">
+                      {{single.name}}
+                      <a href='#deleteUserModal' class="secondary-content" ng-click="addInputs(single)" modal>
+                        <i class="material-icons" style="color: #d50000;">clear</i>
+                      </a>
+                      <a class='secondary-content' href='#addUserModal' ng-click="addInputs(single)" modal>
+                        <i class="material-icons">mode_edit</i>
+                      </a>
+                      
+
+                    </div>
+                    <div class="collapsible-body" >
+                        <p ng-model="single">
+                            Email: {{single.email}} <br>
+                            Phone Number: {{single.phone}} <br>
+                        </p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="card-action center-align">
+          <pagination
+            page="1"
+            page-size="7"
+            total="users.length"
+            show-prev-next="true"
+            use-simple-prev-next="false"
+            dots="...."
+            hide-if-empty="false"
+            adjacent="2"
+            scroll-top="false"
+            pagination-action="changePage(page)" />
+        </div>
+      </div>
+    </div>
+</div>
+</main>
+<!--Footer-->
+<footer ng-include="'views/parts/footer.html'" class="page-footer purple darken-3"></footer>

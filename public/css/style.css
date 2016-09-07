@@ -1,11 +1,18 @@
 html,
 body {
     width: 100%;
+    
 }
 html {
 }
 body {
-    
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main{
+  flex: 1 0 auto;
 }
 
 .login-body{
@@ -46,4 +53,8 @@ header, main, footer {
   header, main, footer {
     padding-left: 0;
   }
+}
+
+.add-drive-btn{
+  margin-top: 20px;
 }
