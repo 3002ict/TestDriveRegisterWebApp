@@ -96,18 +96,11 @@ app.controller('main_controller', ["$scope", "$firebaseAuth", "$firebaseArray", 
       $scope.rating_data[0][num] = parseFloat($scope.rate_sum[num])/parseFloat($scope.rate_num[num]);
     }
     
-    
-    // any time auth state changes, add the user data to scope
-    auth.$onAuthStateChanged(function(firebaseUser) {
-      $scope.firebaseUser = firebaseUser;
-      if(firebaseUser){
-        console.dir("User is signed in");
-        var userId = firebase.auth().currentUser.uid;
-        var userRef = firebase.database().ref().child("users").child(userId);
-        var drivesRef = firebase.database().ref().child("drives");
-        var drivesQuery = drivesRef.limitToFirst(600);
-        $scope.user = $firebaseObject(userRef);
-        $scope.drives = $firebaseArray(drivesQuery);
+    function getData(){
+      $scope.preLoad = true;
+      var drivesRef = firebase.database().ref().child("drives");
+      var drivesQuery = drivesRef.limitToFirst(600);
+      $scope.drives = $firebaseArray(drivesQuery);
         $scope.drives.$loaded(function() {
           //show latest data at first page
           $scope.drives= $scope.drives.reverse();
@@ -131,6 +124,20 @@ app.controller('main_controller', ["$scope", "$firebaseAuth", "$firebaseArray", 
         $scope.drives.$watch(function(event) {
           // console.log(event);
         });
+    };
+    
+    
+    // any time auth state changes, add the user data to scope
+    auth.$onAuthStateChanged(function(firebaseUser) {
+      $scope.firebaseUser = firebaseUser;
+      if(firebaseUser){
+        console.dir("User is signed in");
+        var userId = firebase.auth().currentUser.uid;
+        var userRef = firebase.database().ref().child("users").child(userId);
+        $scope.user = $firebaseObject(userRef);
+        
+        getData();
+        
       }else{
         console.dir("No user is signed in.");
         window.location.href = '#/sign_in';
@@ -194,6 +201,30 @@ app.controller('main_controller', ["$scope", "$firebaseAuth", "$firebaseArray", 
       $scope.orderBy = type;
     };
     
+    $scope.makes = ["Audi", "VW", "Mazda", "Jaguar", "Land Rover", "Hyundai", "Chrysler", "Jeep", "Dodge", "Isuzu"];
+
+    $scope.selectMake = function(make){
+      $scope.inputs.make = make;
+    };
+    
+    $scope.updateDrive = function(){
+      if(isValid($scope.inputs)){
+        // change data and save it
+        var item = $scope.drives.$getRecord($scope.inputs.$id);
+        item = $scope.inputs;
+        $scope.drives.$save(item).then(function() {
+          // data has been saved to our database
+        });
+      }else{
+        alert("Invalid Data");
+        getData();
+      }
+    };
+    
+    $scope.cancel = function(){
+      getData();
+    };
+    
 }]);
 
 
@@ -201,6 +232,20 @@ app.controller('main_controller', ["$scope", "$firebaseAuth", "$firebaseArray", 
 app.controller('users_controller', ["$scope", "$firebaseAuth", "$firebaseArray", "$firebaseObject",
   function($scope, $firebaseAuth, $firebaseArray, $firebaseObject) {
     var auth = $firebaseAuth();
+    
+    function getData(){
+      $scope.preLoad = true;
+      var usersRef = firebase.database().ref().child("users");
+      var usersQuery = usersRef.limitToFirst(1000);
+      $scope.users = $firebaseArray(usersQuery);
+        
+      $scope.users.$loaded(function() {
+        //show latest data at first page
+        $scope.users= $scope.users.reverse();
+        $scope.preLoad = false;
+      });
+    }
+    
   // any time auth state changes, add the user data to scope
     auth.$onAuthStateChanged(function(firebaseUser) {
       $scope.firebaseUser = firebaseUser;
@@ -209,16 +254,8 @@ app.controller('users_controller', ["$scope", "$firebaseAuth", "$firebaseArray",
         var userId = firebase.auth().currentUser.uid;
         var userRef = firebase.database().ref().child("users").child(userId);
         $scope.user = $firebaseObject(userRef);
-        var usersRef = firebase.database().ref().child("users");
-        var usersQuery = usersRef.limitToFirst(300);
-        $scope.user = $firebaseObject(userRef);
-        $scope.users = $firebaseArray(usersQuery);
         
-        $scope.users.$loaded(function() {
-          //show latest data at first page
-          $scope.users= $scope.users.reverse();
-          $scope.preLoad = false;
-        });
+        getData();
         
       }else{
         console.dir("No user is signed in.");
@@ -244,12 +281,35 @@ app.controller('users_controller', ["$scope", "$firebaseAuth", "$firebaseArray",
     //search filter
     $scope.orderReverse = true;
     $scope.orderBy = "name";
-    $scope.types = ["name", "email", "phone"];
+    $scope.types = ["name", "email", "phone", "role"];
 
     $scope.selectType = function(type){
       $scope.orderBy = type;
     };
     
+    $scope.updateUser = function(){
+      if(isValidUser($scope.inputs)){
+        // change data and save it
+        var item = $scope.users.$getRecord($scope.inputs.$id);
+        item = $scope.inputs;
+        $scope.users.$save(item).then(function() {
+          // data has been saved to our database
+        });
+      }else{
+        alert("Invalid Data");
+        getData();
+      }
+    };
+    
+    $scope.cancel = function(){
+      getData();
+    };
+    
+    $scope.roles = ["user", "admin"];
+    
+    $scope.selectRole = function(role){
+      $scope.inputs.role = role;
+    };
     
 }]);
 
@@ -279,3 +339,43 @@ app.controller('agreement_controller', function(){
   
 });
 
+function isValid(inputs){
+  
+  if(!inputs.drivername){
+    return false;
+  }
+  
+  if(!inputs.licence){
+    return false;
+  }
+  
+  if(!inputs.phone){
+    return false;
+  }
+  
+  if(!inputs.email){
+    return false;
+  }
+  
+  if(!inputs.address){
+    return false;
+  }
+  
+  if(!inputs.rego){
+    return false;
+  }
+  
+  if(!inputs.model){
+    return false;
+  }
+  
+  return true;
+}
+
+function isValidUser(inputs){
+  if(!inputs.name){
+    return false;
+  }
+  
+  return true;
+}

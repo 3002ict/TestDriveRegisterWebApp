@@ -38,12 +38,35 @@
                 <label for="icon_prefix">Mailing Address</label>
               </div>
             </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="icon_prefix" type="text" class="validate" ng-model="inputs.rego">
+                <label for="icon_prefix">Rego Number</label>
+              </div>
+            </div>
+            <div class="row">
+              <!-- Dropdown Trigger -->
+              Car Make:
+              <a class='dropdown-button btn' href='javascript:void(0);' data-activates='carMakeDropdown' dropdown data-hover="false">
+                  {{inputs.make}}
+              </a>
+              <!-- Dropdown Structure -->
+              <ul id='carMakeDropdown' class='dropdown-content'>
+                <span ng-repeat="make in makes">
+                  <li><a href="javascript:void(0);" ng-click="selectMake(make)">{{make}}</a></li>
+                </span>
+              </ul>
+              <div class="input-field col s8">
+                <input id="icon_prefix" type="text" class="validate" ng-model="inputs.model">
+                <label for="icon_prefix">Model</label>
+              </div>
+            </div>
           </form>
         </div>
     </div>
     <div class="modal-footer">
         <a href="javascript:void(0);" ng-click="updateDrive()" class=" modal-action modal-close waves-effect waves-green btn-flat">ADD</a>
-        <a href="javascript:void(0);" class=" modal-action modal-close waves-effect waves-green btn-flat">CANCEL</a>
+        <a href="javascript:void(0);" ng-click="cancel()" class=" modal-action modal-close waves-effect waves-green btn-flat">CANCEL</a>
     </div>
 </div>
 
@@ -56,7 +79,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <a href="javascript:void(0);" ng-click="deleteDrive(inputs)" class=" modal-action modal-close waves-effect waves-green btn-flat">DELETE</a>
+        <a href="javascript:void(0);" ng-click="drives.$remove(inputs)" class=" modal-action modal-close waves-effect waves-green btn-flat">DELETE</a>
         <a href="javascript:void(0);" class=" modal-action modal-close waves-effect waves-green btn-flat">CANCEL</a>
     </div>
 </div>
@@ -77,7 +100,7 @@
                     <div class="nav-wrapper grey grey lighten-5">
                       <form>
                         <div class="input-field">
-                          <input id="search" type="search" ng-model="searchText" required>
+                          <input id="search" type="search" ng-model="searchText">
                           <label for="search"><i class="material-icons" style="color:black">search</i></label>
                           <i class="material-icons" ng-click="searchText=''">close</i>
                         </div>
@@ -88,11 +111,11 @@
             <div class="row center">
               <div class="col s6">
                 <!-- Dropdown Trigger -->
-                <a class='dropdown-button btn' href='javascript:void(0);' data-activates='demoDropdown' dropdown data-hover="false">
+                <a class='dropdown-button btn' href='javascript:void(0);' data-activates='orderByDropdown' dropdown data-hover="false">
                     <i class="material-icons left">subject</i>{{orderBy}}
                 </a>
                 <!-- Dropdown Structure -->
-                <ul id='demoDropdown' class='dropdown-content'>
+                <ul id='orderByDropdown' class='dropdown-content'>
                   <span  ng-repeat="type in types">
                     <li><a href="javascript:void(0);" ng-click="selectType(type)">{{type}}</a></li>
                   </span>
