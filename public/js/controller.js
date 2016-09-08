@@ -31,6 +31,10 @@ app.config(function($routeProvider, ChartJsProvider){
                 .when('/settings', {
                   templateUrl: 'views/settings.html',
                   controller: 'settings_controller'
+                })
+                .when('/agreement', {
+                  templateUrl: 'views/agreement.html',
+                  controller: 'agreement_controller'
                 });
         });
         
@@ -76,26 +80,6 @@ app.controller('sign_in_controller', ["$scope", "$firebaseAuth", "$firebaseArray
   };
 }]);
 
-
-// function getNumOfMake(make){
-//   //Audi | VW |Mazda | Jaguar | Land Rover |Hyundai |Chrysler | Jeep | Dodge | Isuzu|
-//   switch(make){
-//     case "Audi":
-//       return 0;
-//       break;
-//     case "VW":
-//       return 1;
-//     case 'Mazda':
-//       return 2;
-//       break;
-//     case 'Jaguar':
-//       // code
-//       break;
-    
-    
-//   }
-// }
-
           
 app.controller('main_controller', ["$scope", "$firebaseAuth", "$firebaseArray", "$firebaseObject",
    function($scope, $firebaseAuth, $firebaseArray, $firebaseObject) {
@@ -121,9 +105,8 @@ app.controller('main_controller', ["$scope", "$firebaseAuth", "$firebaseArray", 
         var userId = firebase.auth().currentUser.uid;
         var userRef = firebase.database().ref().child("users").child(userId);
         var drivesRef = firebase.database().ref().child("drives");
-        var drivesQuery = drivesRef.limitToFirst(300);
+        var drivesQuery = drivesRef.limitToFirst(600);
         $scope.user = $firebaseObject(userRef);
-        console.dir($firebaseArray(drivesQuery));
         $scope.drives = $firebaseArray(drivesQuery);
         $scope.drives.$loaded(function() {
           //show latest data at first page
@@ -189,7 +172,8 @@ app.controller('main_controller', ["$scope", "$firebaseAuth", "$firebaseArray", 
               }]
           }};
     
-    
+    $scope.min = 0;
+    $scope.max = 7;
     $scope.changePage = function(page){
       $scope.min = (page - 1) * 7;
       $scope.max = page * 7;
@@ -201,8 +185,19 @@ app.controller('main_controller', ["$scope", "$firebaseAuth", "$firebaseArray", 
       $scope.inputs = data;
     };
     
+    //search filter
+    $scope.orderReverse = true;
+    $scope.orderBy = "start_drive";
+    $scope.types = ["drivername", "license", "phone", "email", "address", "rego", "make", "model", "start_drive", "finish_drive", "username"];
+
+    $scope.selectType = function(type){
+      $scope.orderBy = type;
+    };
+    
 }]);
 
+
+//Controller for users.html
 app.controller('users_controller', ["$scope", "$firebaseAuth", "$firebaseArray", "$firebaseObject",
   function($scope, $firebaseAuth, $firebaseArray, $firebaseObject) {
     var auth = $firebaseAuth();
@@ -231,6 +226,8 @@ app.controller('users_controller', ["$scope", "$firebaseAuth", "$firebaseArray",
       }
     });
     
+    $scope.min = 0;
+    $scope.max = 7;
     $scope.changePage = function(page){
       $scope.min = (page - 1) * 7;
       $scope.max = page * 7;
@@ -243,6 +240,17 @@ app.controller('users_controller', ["$scope", "$firebaseAuth", "$firebaseArray",
     $scope.signout = function(){
       auth.$signOut();
     };
+    
+    //search filter
+    $scope.orderReverse = true;
+    $scope.orderBy = "name";
+    $scope.types = ["name", "email", "phone"];
+
+    $scope.selectType = function(type){
+      $scope.orderBy = type;
+    };
+    
+    
 }]);
 
 app.controller('settings_controller', ["$scope", "$firebaseAuth", "$firebaseArray", "$firebaseObject",
@@ -265,4 +273,9 @@ app.controller('settings_controller', ["$scope", "$firebaseAuth", "$firebaseArra
     });
 
 }]);
+
+
+app.controller('agreement_controller', function(){
+  
+});
 

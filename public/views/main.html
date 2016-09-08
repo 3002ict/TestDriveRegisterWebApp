@@ -72,6 +72,38 @@
             <div class="row">
               <span class="card-title">Test Drive:</span>
             </div>
+            <div class="row">
+                <nav>
+                    <div class="nav-wrapper grey grey lighten-5">
+                      <form>
+                        <div class="input-field">
+                          <input id="search" type="search" ng-model="searchText" required>
+                          <label for="search"><i class="material-icons" style="color:black">search</i></label>
+                          <i class="material-icons" ng-click="searchText=''">close</i>
+                        </div>
+                      </form>
+                    </div>
+                </nav>
+            </div>
+            <div class="row center">
+              <div class="col s6">
+                <!-- Dropdown Trigger -->
+                <a class='dropdown-button btn' href='javascript:void(0);' data-activates='demoDropdown' dropdown data-hover="false">
+                    <i class="material-icons left">subject</i>{{orderBy}}
+                </a>
+                <!-- Dropdown Structure -->
+                <ul id='demoDropdown' class='dropdown-content'>
+                  <span  ng-repeat="type in types">
+                    <li><a href="javascript:void(0);" ng-click="selectType(type)">{{type}}</a></li>
+                  </span>
+                </ul>
+                
+              </div>
+              <div class="col s6">
+                  <input type="checkbox" class="filled-in" id="filled-in-box" checked="checked" ng-click="orderReverse = !orderReverse" />
+                  <label for="filled-in-box">Reverse</label>
+              </div>
+            </div>
             <div class="row center" ng-show="preLoad">
               <div class="preloader-wrapper big active">
                 <div class="spinner-layer spinner-blue">
@@ -87,11 +119,11 @@
             </div>
             
             <ul class="collapsible popout" data-collapsible="accordion" watch>
-                <li ng-repeat="single in drives" >
+                <li ng-repeat="single in drives | orderBy:orderBy:orderReverse | filter:searchText" ng-if="$index >= min && $index < max">
                     <div class="collapsible-header">
                       {{single.drivername}}
                       <a href='#deleteDriveModal' class="secondary-content" ng-click="addInputs(single)" modal>
-                        <i class="material-icons" style="color: #d50000;">clear</i>
+                        <i class="material-icons" style="color: #d50000;">delete</i>
                       </a>
                       <a class='secondary-content' href='#addDriveModal' ng-click="addInputs(single)" modal>
                         <i class="material-icons">mode_edit</i>
@@ -105,6 +137,15 @@
                             Email: {{single.email}} <br>
                             License Number: {{single.licence}} <br>
                             Maling Address: {{single.address}} <br>
+                            Start Drive: {{single.start_drive}}<br>
+                            Finish Drive: {{single.finish_drive}}<br>
+                            Car Make: {{single.make}}<br>
+                            Car Model: {{single.model}}<br>
+                            Rego Number: {{single.rego}}<br>
+                            Rate: {{single.rate}}<br>
+                            Comments: {{single.comments}}<br>
+                            User: {{single.username}}<br>
+                            Status: {{single.status}}<br>
                         </p>
                     </div>
                 </li>
