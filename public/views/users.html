@@ -2,9 +2,9 @@
 <header ng-include="'views/parts/header.html'"></header>
 <main>
 <!-- Modal Structure for Edit -->
-<div id="addUserModal" class="modal modal-fixed-footer">
+<div id="updateUserModal" class="modal modal-fixed-footer">
     <div class="modal-content">
-        <h4>Test Drive</h4>
+        <h4>Update User</h4>
         <div class="row">
           <form class="col s12">
             <div class="row">
@@ -41,13 +41,70 @@
     </div>
 </div>
 
+<div id="addUserModal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <h4>Create New User</h4>
+        <div class="row">
+          <form class="col s12">
+            <div class="row">
+              <!-- Dropdown Trigger -->
+              Role:
+              <a class='dropdown-button btn' href='javascript:void(0);' data-activates='newUserRoleDropdown' dropdown data-hover="false">
+                  {{newUser.role}}
+              </a>
+              <!-- Dropdown Structure -->
+              <ul id='newUserRoleDropdown' class='dropdown-content'>
+                <span ng-repeat="newUserRole in newUserRoles">
+                  <li><a href="javascript:void(0);" ng-click="selectNewUserRole(newUserRole)">{{newUserRole}}</a></li>
+                </span>
+              </ul>
+            </div>
+            <div class="row">
+              <div class="input-field col s12" input-field>
+                  <input class="validate" id="icon_prefix" type="text" ng-model="newUser.name">
+                  <label for="icon_prefix">Name</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="icon_prefix" type="text" class="validate" ng-model="newUser.phone">
+                <label for="icon_prefix">Phone Number</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="username" type="text" ng-model="newUser.email" required>
+                <label for="username" >Email</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="password" type="password" ng-model="newUser.password" required>
+                <label for="password">Password</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="confirm_password" type="password" ng-model="newUser.confirmPassword" required>
+                <label for="confirm_password">Confirm Password</label>
+              </div>
+            </div>
+          </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:void(0);" ng-click="createUser()" class=" modal-action modal-close waves-effect waves-green btn-flat">ADD</a>
+        <a href="javascript:void(0);" class=" modal-action modal-close waves-effect waves-green btn-flat">CANCEL</a>
+    </div>
+</div>
+
 <div class="row">
     <div class="col s12 m8">
       <div class="card">
         <div class="card-content">
           <!-- Modal Trigger -->
           <div class="col right">
-              <a class="btn-floating waves-effect waves-light" ><i class="material-icons">add</i></a>
+              <a href="#addUserModal" class="btn-floating waves-effect waves-light" modal><i class="material-icons">add</i></a>
           </div>        
             <div class="row">
               <span class="card-title">Users:</span>
@@ -97,16 +154,16 @@
                 </div>
               </div>
             </div>
-            
+            <div class="row">
+              <p ng-if="error">Error: <strong>{{ error }}</strong></p>
+            </div>
             <ul class="collapsible popout" data-collapsible="accordion" watch>
                 <li ng-repeat="single in users | orderBy:orderBy:orderReverse | filter:searchText" ng-if="$index >= min && $index < max">
                     <div class="collapsible-header">
                       {{single.name}}
-                      <a class='secondary-content' href='#addUserModal' ng-click="addInputs(single)" modal>
+                      <a class='secondary-content' href='#updateUserModal' ng-click="addInputs(single)" modal>
                         <i class="material-icons">mode_edit</i>
                       </a>
-                      
-
                     </div>
                     <div class="collapsible-body" >
                         <p ng-model="single">

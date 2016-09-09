@@ -140,6 +140,9 @@
                 </div>
               </div>
             </div>
+            <div class="row">
+              <p ng-if="error">Error: <strong>{{ error.message }}</strong></p>
+            </div>
             
             <ul class="collapsible popout" data-collapsible="accordion" watch>
                 <li ng-repeat="single in drives | orderBy:orderBy:orderReverse | filter:searchText" ng-if="$index >= min && $index < max">
