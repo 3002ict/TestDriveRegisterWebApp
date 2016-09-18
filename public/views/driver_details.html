@@ -1,41 +1,103 @@
-<div class="container">
-    <div class="header clearfix">
-        <nav class="navbar navbar-dark bg-primary">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span> 
-                  </button>
-                  <a class="navbar-brand" href="#">TestDriveRegister</a>
-                </div>
-                <div class="collapse navbar-collapse" id="myNavbar">
-                  <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#">About</a></li>
-                  </ul>
-                  <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                  </ul>
-                </div>
-             </div>
-        </nav>
+<!--Header-->
+<header ng-include="'views/partials/header_app.html'" class="app"></header>
+<main class="app app-body">
+  <div class="row center" style="max-width:900px">
+    <div class="col s12 m12">
+      <div class="card">
+        <div class="row">
+          <form class="col s12">
+            
+            <div class="row">
+              <div class="input-field col s12" input-field>
+                  <input class="validate" id="icon_prefix" type="text" ng-model="drive.drivername">
+                  <label for="icon_prefix">Name</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="icon_prefix" type="text" class="validate" ng-model="drive.licence">
+                <label for="icon_prefix">License Number</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="icon_prefix" type="text" class="validate" ng-model="drive.phone">
+                <label for="icon_prefix">Phone Number</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="icon_prefix" type="text" class="validate" ng-model="drive.email">
+                <label for="icon_prefix">Email</label>
+              </div>
+            </div>
+            <div class="row">
+              Mailing Address:
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="icon_prefix" type="text" class="validate" ng-model="street">
+                <label for="icon_prefix">Street Address</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="icon_prefix" type="text" class="validate" ng-model="suburb">
+                <label for="icon_prefix">Suburb</label>
+              </div>
+            </div>
+            <div class="row">
+              <!-- Dropdown Trigger -->
+              <div class="col s4">
+                State:
+                <a class='dropdown-button btn' href='javascript:void(0);' data-activates='stateDropdown' dropdown data-hover="false">
+                    {{currentState}}
+                </a>
+                <!-- Dropdown Structure -->
+                <ul id='stateDropdown' class='dropdown-content'>
+                  <span ng-repeat="state in states">
+                    <li><a href="javascript:void(0);" ng-click="selectState(state)">{{state}}</a></li>
+                  </span>
+                </ul>
+              </div>
+              <div class="input-field col s8">
+                <input id="icon_prefix" type="text" class="validate" ng-model="postcode">
+                <label for="icon_prefix">Postcode</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="icon_prefix" type="text" class="validate" ng-model="drive.rego">
+                <label for="icon_prefix">Rego Number</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col s4">
+                <!-- Dropdown Trigger -->
+                Car Make:
+                <a class='dropdown-button btn' href='javascript:void(0);' data-activates='carMakeDropdown' dropdown data-hover="false">
+                    {{drive.make}}
+                </a>
+                <!-- Dropdown Structure -->
+                <ul id='carMakeDropdown' class='dropdown-content'>
+                  <span ng-repeat="make in makes">
+                    <li><a href="javascript:void(0);" ng-click="selectMake(make)">{{make}}</a></li>
+                  </span>
+                </ul>
+              </div>
+              <div class="input-field col s8">
+                <input id="icon_prefix" type="text" class="validate" ng-model="drive.model">
+                <label for="icon_prefix">Model</label>
+              </div>
+            </div>
+            <div class="row">
+              <a class="waves-effect waves-light btn-large yellow black-text" href="#/agreement_page">Next</a>
+            </div>
+          </form>
+        </div>
+
+      </div>
     </div>
-    <div class="jumbotron start-jumbotron">
-        <h1>Driver Details</h1>
-        <p class="lead">Please fill in the form</p>
-        <form class="form-driver_details">
-            <label for="inputName" class="sr-only">Name</label>
-            <input type="text" id="inputName" class="form-control" placeholder="Driver Name" ng-model="drivername" required autofocus>
-            <label for="inputPhone" class="sr-only">Phone Number</label>
-            <input type="text" id="inputPhone" class="form-control" placeholder="Phone Number" ng-model="phone" required>
-            <label for="inputLicence" class="sr-only">Licence Number</label>
-            <input type="text" id="inputLicence" class="form-control" placeholder="Licence Number" ng-model="licence" required>
-            <label for="inputLicence" class="sr-only">Email</label>
-            <input type="text" id="inputEmail" class="form-control" placeholder="Email" ng-model="email" required>
-            <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="onClickDriverDetails">Next</button>
-        </form>
-    </div>
-</div>
+  </div>
+</main>
+<footer ng-include="'views/partials/footer_app.html'" class="app purple darken-3"></footer>

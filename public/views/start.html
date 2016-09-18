@@ -1,0 +1,73 @@
+<!--Header-->
+<header ng-include="'views/partials/header_app.html'" class="app"></header>
+<main class="app app-body">
+  <div class="row center" style="max-width:900px">
+    <div class="col s12 m12">
+      <div class="card">
+          <div class="container">
+                <div class="row">
+                    <table>
+                        <thead>
+                          <tr>
+                              <th data-field="id">Type</th>
+                              <th data-field="name">Filled Item</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Name:</td>
+                            <td>James Frizelle</td>
+                          </tr>
+                          <tr>
+                            <td>Licence Number:</td>
+                            <td>12345</td>
+                          </tr>
+                          <tr>
+                            <td>Phone Number:</td>
+                            <td>04321567</td>
+                          </tr>
+                          <tr>
+                            <td>Email:</td>
+                            <td>jamesfrizelle@example.com</td>
+                          </tr>
+                          <tr>
+                            <td>Mailing Address:</td>
+                            <td>Example Street, Southport, QLD 4215</td>
+                          </tr>
+                          <tr>
+                            <td>Car Make:</td>
+                            <td>Audi</td>
+                          </tr>
+                          <tr>
+                            <td>Car Model</td>
+                            <td>A1</td>
+                          </tr>
+                          <tr>
+                            <td>Name</td>
+                            <td>rego123</td>
+                          </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                  <!-- Modal Trigger -->
+                  <a class="waves-effect waves-light btn-large yellow black-text" style="margin:20px;" href="#driverDetailsModal" modal>Confirm & Start</a>
+                  <!-- Modal Structure -->
+                  <div id="driverDetailsModal" class="modal">
+                      <div class="modal-content">
+                          <h4>Submission Successful</h4>
+                          <p>All OK, Let's start the test drive</p>
+                          <i class="medium material-icons circle green accent-4" style="margin:20px; color:white;">done</i>
+                      </div>
+                      <div class="modal-footer">
+                          <a  class=" modal-action modal-close waves-effect waves-green btn-flat" href="#/drive">OK</a>
+                      </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<footer ng-include="'views/partials/footer_app.html'" class="app purple darken-3"></footer>

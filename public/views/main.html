@@ -1,5 +1,5 @@
 <!--Header-->
-<header ng-include="'views/parts/header.html'"></header>
+<header ng-include="'views/partials/header.html'"></header>
 <main>
 <!-- Modal Structure for Edit -->
 <div id="addDriveModal" class="modal modal-fixed-footer">
@@ -88,9 +88,8 @@
     <div class="col s12 m8">
       <div class="card">
         <div class="card-content">
-          <!-- Modal Trigger -->
           <div class="col right">
-              <a class="btn-floating waves-effect waves-light" ><i class="material-icons">add</i></a>
+              <a class="btn-floating waves-effect waves-light" href="#/profile"><i class="material-icons">add</i></a>
           </div>        
             <div class="row">
               <span class="card-title">Test Drive:</span>
@@ -216,4 +215,4 @@
     </div>
 </div>
 </main>
-<footer ng-include="'views/parts/footer.html'" class="page-footer purple darken-3"></footer>
+<footer ng-include="'views/partials/footer.html'" class="page-footer purple darken-3"></footer>

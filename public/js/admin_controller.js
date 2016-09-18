@@ -1,111 +1,4 @@
-// Initialize Firebase
-var config = {
-apiKey: "AIzaSyCzCg5-nEGLkQKDwSrWvMN9aKjL7XecdR8",
-authDomain: "testdriveregister-4ef26.firebaseapp.com",
-databaseURL: "https://testdriveregister-4ef26.firebaseio.com",
-storageBucket: "testdriveregister-4ef26.appspot.com",
-};
-firebase.initializeApp(config);
-
-// Intialize a "Secondary" App
-var secondaryApp = firebase.initializeApp(config, "Secondary");
-
-var app = angular.module('App', ['ngRoute', 'ui.materialize', 'chart.js', 'firebase']);
-
-
-
-// Get a reference to the database service
-var database = firebase.database();
-app.run(["$rootScope", "$location", function($rootScope, $location) {
-  $rootScope.$on("$routeChangeError", function(event, next, previous, error) {
-    // We can catch the error thrown when the $requireSignIn promise is rejected
-    // and redirect the user back to the home page
-    console.log(error);
-    if (error === "AUTH_REQUIRED") {
-      console.log("Authentication is required.");
-      $location.path("/sign_in");
-    }
-  });
-}]);
-
-app.config(["$routeProvider", function($routeProvider){
-            $routeProvider
-                .when('/sign_in',{
-                    templateUrl : 'views/sign_in.html',
-                    controller : 'sign_in_controller',
-                    resolve: {
-                      // controller will not be loaded until $waitForSignIn resolves
-                      // Auth refers to our $firebaseAuth wrapper in the factory below
-                      "currentAuth": ["Auth", function(Auth) {
-                        // $waitForSignIn returns a promise so the resolve waits for it to complete
-                        return Auth.$waitForSignIn();
-                      }]
-                    }
-                })
-                .when('/',{
-                    templateUrl : 'views/main.html',
-                    controller : 'main_controller',
-                    resolve: {
-                      // controller will not be loaded until $requireSignIn resolves
-                      // Auth refers to our $firebaseAuth wrapper in the factory below
-                      "currentAuth": ["Auth", function(Auth) {
-                        // $requireSignIn returns a promise so the resolve waits for it to complete
-                        // If the promise is rejected, it will throw a $stateChangeError (see above)
-                        return Auth.$requireSignIn();
-                      }]
-                    }
-                })
-                .when('/users', {
-                  templateUrl: 'views/users.html',
-                  controller: 'users_controller',
-                  resolve: {
-                    // controller will not be loaded until $requireSignIn resolves
-                    // Auth refers to our $firebaseAuth wrapper in the factory below
-                    "currentAuth": ["Auth", function(Auth) {
-                      // $requireSignIn returns a promise so the resolve waits for it to complete
-                      // If the promise is rejected, it will throw a $stateChangeError (see above)
-                      return Auth.$requireSignIn();
-                    }]
-                  }
-                })
-                .when('/settings', {
-                  templateUrl: 'views/settings.html',
-                  controller: 'settings_controller',
-                  resolve: {
-                      // controller will not be loaded until $requireSignIn resolves
-                      // Auth refers to our $firebaseAuth wrapper in the factory below
-                      "currentAuth": ["Auth", function(Auth) {
-                        // $requireSignIn returns a promise so the resolve waits for it to complete
-                        // If the promise is rejected, it will throw a $stateChangeError (see above)
-                        return Auth.$requireSignIn();
-                      }]
-                    }
-                })
-                .when('/profile', {
-                  templateUrl: 'views/profile.html',
-                  controller: 'profile_controller',
-                  resolve: {
-                      // controller will not be loaded until $requireSignIn resolves
-                      // Auth refers to our $firebaseAuth wrapper in the factory below
-                      "currentAuth": ["Auth", function(Auth) {
-                        // $requireSignIn returns a promise so the resolve waits for it to complete
-                        // If the promise is rejected, it will throw a $stateChangeError (see above)
-                        return Auth.$requireSignIn();
-                      }]
-                    }
-                })
-                .when('/agreement', {
-                  templateUrl: 'views/agreement.html',
-                  controller: 'agreement_controller'
-                });
-        }]);
-        
-
-app.factory("Auth", ["$firebaseAuth",
-  function($firebaseAuth) {
-    return $firebaseAuth();
-  }
-]);
+var app = angular.module('App');
 
 app.controller('sign_in_controller', ["currentAuth", "Auth", "$scope","$location", "$firebaseArray", "$firebaseObject",
    function(currentAuth, Auth, $scope, $location, $firebaseArray, $firebaseObject) {
@@ -431,13 +324,7 @@ app.controller('settings_controller', ["$scope", "Auth", "currentAuth", "$fireba
 }]);
 
 
-app.controller('agreement_controller', function(){
-  
-});
 
-app.controller('profile_controller', function(){
-  
-});
 
 function isValid(inputs){
   

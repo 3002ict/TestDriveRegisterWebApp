@@ -1,21 +1,18 @@
 html,
 body {
     width: 100%;
-    
 }
 html {
 }
 body {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
+   
 }
 
 main{
-  flex: 1 0 auto;
+ 
 }
 
-.login-body{
+.login-body, .app-body{
   height: 100%;
   width: 100%;
   align-items: center;
@@ -47,7 +44,33 @@ main{
 
 header, main, footer {
       padding-left: 300px;
-    }
+}
+
+header.app, main.app, footer.app{
+      padding-left: 0px;
+}
+
+footer.app{
+  position: fixed;
+  bottom: -5px;
+  width: 100%;
+  z-index: 3;
+}
+
+header.app{
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+}
+
+main.app{
+  padding-top: 30px;
+  padding-bottom: 100px;
+  z-index: 0;
+}
+
+
 
 @media only screen and (max-width : 992px) {
   header, main, footer {
@@ -57,4 +80,8 @@ header, main, footer {
 
 .add-drive-btn{
   margin-top: 20px;
+}
+
+span.thumb{
+  display: none;
 }

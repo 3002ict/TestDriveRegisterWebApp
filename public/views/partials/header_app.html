@@ -1,0 +1,18 @@
+<!-- Dropdown Structure -->
+<ul id='menuDropdown' class='dropdown-content'>
+    <li><a href="javascript:void(0);" ng-click="signout()">Sign Out</a></li>
+</ul>
+<!-- Nav bar-->
+<div class="navbar-fixed">
+  <nav class="purple darken-4 " role="navigation">
+    <div class="nav-wrapper container">
+      <a class="brand-logo left" href="{{backAddress}}"><i class="material-icons">{{backButton}}</i>{{appName}}</a>
+      <!--drop down menu-->
+        
+      <ul class="right">
+         <!--Dropdown Trigger -->
+        <li><a class="dropdown-button" href="javascript:void(0);" data-activates="menuDropdown" dropdown><i class="material-icons">more_vert</i></a></li>
+      </ul>
+    </div>
+  </nav>
+</div>
