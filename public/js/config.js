@@ -28,7 +28,7 @@ app.run(["$rootScope", "$location", function($rootScope, $location) {
   });
 }]);
 
-app.config(["$routeProvider", function($routeProvider){
+app.config(["$routeProvider", '$locationProvider', function($routeProvider, $locationProvider){
             $routeProvider
                 .when('/sign_in',{
                     templateUrl : 'views/sign_in.html',
@@ -119,6 +119,11 @@ app.config(["$routeProvider", function($routeProvider){
                         // $requireSignIn returns a promise so the resolve waits for it to complete
                         // If the promise is rejected, it will throw a $stateChangeError (see above)
                         return Auth.$requireSignIn();
+                      }],
+                      //ensure current page is right
+                      "currentDrive": ["DriveService", function(DriveService){
+                        DriveService.checkCurrentPage();
+                        return DriveService;
                       }]
                     }
                 })
@@ -132,6 +137,11 @@ app.config(["$routeProvider", function($routeProvider){
                         // $requireSignIn returns a promise so the resolve waits for it to complete
                         // If the promise is rejected, it will throw a $stateChangeError (see above)
                         return Auth.$requireSignIn();
+                      }],
+                      //ensure current page is right
+                      "currentDrive": ["DriveService", function(DriveService){
+                        DriveService.checkCurrentPage();
+                        return DriveService;
                       }]
                     }
                 })
@@ -145,6 +155,11 @@ app.config(["$routeProvider", function($routeProvider){
                         // $requireSignIn returns a promise so the resolve waits for it to complete
                         // If the promise is rejected, it will throw a $stateChangeError (see above)
                         return Auth.$requireSignIn();
+                      }],
+                      //ensure current page is right
+                      "currentDrive": ["DriveService", function(DriveService){
+                        DriveService.checkCurrentPage();
+                        return DriveService;
                       }]
                     }
                 })
@@ -158,6 +173,11 @@ app.config(["$routeProvider", function($routeProvider){
                         // $requireSignIn returns a promise so the resolve waits for it to complete
                         // If the promise is rejected, it will throw a $stateChangeError (see above)
                         return Auth.$requireSignIn();
+                      }],
+                      //ensure current page is right
+                      "currentDrive": ["DriveService", function(DriveService){
+                        DriveService.checkCurrentPage();
+                        return DriveService;
                       }]
                     }
                 })
@@ -169,7 +189,11 @@ app.config(["$routeProvider", function($routeProvider){
                     // default page
                     redirectTo: '/sign_in'
                 });
-        }]);
+
+  $locationProvider.html5Mode(true);
+  
+
+}]);
         
 
 app.factory("Auth", ["$firebaseAuth",

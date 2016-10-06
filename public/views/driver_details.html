@@ -10,25 +10,25 @@
             <div class="row">
               <div class="input-field col s12" input-field>
                   <input class="validate" id="icon_prefix" type="text" ng-model="drive.drivername">
-                  <label for="icon_prefix">Name</label>
+                  <label for="icon_prefix" data-error="wrong" data-success="right">Name</label>
               </div>
             </div>
             <div class="row">
               <div class="input-field col s12">
                 <input id="icon_prefix" type="text" class="validate" ng-model="drive.licence">
-                <label for="icon_prefix">License Number</label>
+                <label for="icon_prefix" data-error="wrong" data-success="right">License Number</label>
               </div>
             </div>
             <div class="row">
               <div class="input-field col s12">
-                <input id="icon_prefix" type="text" class="validate" ng-model="drive.phone">
-                <label for="icon_prefix">Phone Number</label>
+                <input id="icon_prefix" type="number" class="validate" ng-model="drive.phone">
+                <label for="icon_prefix" data-error="wrong" data-success="right">Phone Number</label>
               </div>
             </div>
             <div class="row">
               <div class="input-field col s12">
-                <input id="icon_prefix" type="text" class="validate" ng-model="drive.email">
-                <label for="icon_prefix">Email</label>
+                <input id="icon_prefix" type="email" class="validate" ng-model="drive.email">
+                <label for="icon_prefix" data-error="wrong" data-success="right">Email</label>
               </div>
             </div>
             <div class="row">
@@ -37,13 +37,13 @@
             <div class="row">
               <div class="input-field col s12">
                 <input id="icon_prefix" type="text" class="validate" ng-model="street">
-                <label for="icon_prefix">Street Address</label>
+                <label for="icon_prefix" data-error="wrong" data-success="right">Street Address</label>
               </div>
             </div>
             <div class="row">
               <div class="input-field col s12">
                 <input id="icon_prefix" type="text" class="validate" ng-model="suburb">
-                <label for="icon_prefix">Suburb</label>
+                <label for="icon_prefix" data-error="wrong" data-success="right">Suburb</label>
               </div>
             </div>
             <div class="row">
@@ -61,14 +61,14 @@
                 </ul>
               </div>
               <div class="input-field col s8">
-                <input id="icon_prefix" type="text" class="validate" ng-model="postcode">
-                <label for="icon_prefix">Postcode</label>
+                <input id="icon_prefix" type="number" class="validate" ng-model="postcode">
+                <label for="icon_prefix" data-error="wrong" data-success="right">Postcode</label>
               </div>
             </div>
             <div class="row">
               <div class="input-field col s12">
                 <input id="icon_prefix" type="text" class="validate" ng-model="drive.rego">
-                <label for="icon_prefix">Rego Number</label>
+                <label for="icon_prefix" data-error="wrong" data-success="right">Rego Number</label>
               </div>
             </div>
             <div class="row">
@@ -87,11 +87,14 @@
               </div>
               <div class="input-field col s8">
                 <input id="icon_prefix" type="text" class="validate" ng-model="drive.model">
-                <label for="icon_prefix">Model</label>
+                <label for="icon_prefix" data-error="wrong" data-success="right">Model</label>
               </div>
             </div>
             <div class="row">
-              <a class="waves-effect waves-light btn-large yellow black-text" href="#/agreement_page">Next</a>
+              {{error}}
+            </div>
+            <div class="row">
+              <a class="waves-effect waves-light btn-large yellow black-text" ng-click="nextPage()">Next</a>
             </div>
           </form>
         </div>

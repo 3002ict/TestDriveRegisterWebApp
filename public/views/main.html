@@ -89,7 +89,7 @@
       <div class="card">
         <div class="card-content">
           <div class="col right">
-              <a class="btn-floating waves-effect waves-light" href="#/profile"><i class="material-icons">add</i></a>
+              <a class="btn-floating waves-effect waves-light" ng-click="linkto('/profile')"><i class="material-icons">add</i></a>
           </div>        
             <div class="row">
               <span class="card-title">Test Drive:</span>
@@ -107,24 +107,47 @@
                     </div>
                 </nav>
             </div>
-            <div class="row center">
-              <div class="col s6">
-                <!-- Dropdown Trigger -->
-                <a class='dropdown-button btn' href='javascript:void(0);' data-activates='orderByDropdown' dropdown data-hover="false">
-                    <i class="material-icons left">subject</i>{{orderBy}}
-                </a>
-                <!-- Dropdown Structure -->
-                <ul id='orderByDropdown' class='dropdown-content'>
-                  <span  ng-repeat="type in types">
-                    <li><a href="javascript:void(0);" ng-click="selectType(type)">{{type}}</a></li>
-                  </span>
-                </ul>
-                
-              </div>
-              <div class="col s6">
-                  <input type="checkbox" class="filled-in" id="filled-in-box" checked="checked" ng-click="orderReverse = !orderReverse" />
-                  <label for="filled-in-box">Reverse</label>
-              </div>
+            <div class="row">
+                <label for="inputCreated">Order by property:</label>
+                <div input-field>
+                    <select class="" ng-model="type" ng-change="typeChanged(type)" material-select watch>
+                        <option ng-repeat="value in types">{{value}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+              <input type="checkbox" class="filled-in" id="filled-in-box" checked="checked" ng-click="orderReverse = !orderReverse" />
+              <label for="filled-in-box">Reverse</label>
+            </div>
+            <!--Date picker-->
+            <div class="row">
+              <label for="inputCreated">Search by date:</label>
+                <input input-date
+                    type="text"
+                    name="created"
+                    id="inputCreated"
+                    ng-model="currentTime"
+                    container=""
+                    format="dd/mm/yyyy"
+                    months-full="{{ month }}"
+                    months-short="{{ monthShort }}"
+                    weekdays-full="{{ weekdaysFull }}"
+                    weekdays-short="{{ weekdaysShort }}"
+                    weekdays-letter="{{ weekdaysLetter }}"
+                    disable="disable"
+                    min="{{ minDate }}"
+                    max="{{ maxDate }}"
+                    today="today"
+                    first-day="1"
+                    clear="clear"
+                    close="close"
+                    select-years="15"
+                    on-start="onStart()"
+                    on-render="onRender()"
+                    on-open="onOpen()"
+                    on-close="onClose()"
+                    on-set="onSet()"
+                    on-stop="onStop()" />
             </div>
             <div class="row center" ng-show="preLoad">
               <div class="preloader-wrapper big active">
@@ -144,7 +167,7 @@
             </div>
             
             <ul class="collapsible popout" data-collapsible="accordion" watch>
-                <li ng-repeat="single in drives | orderBy:orderBy:orderReverse | filter:searchText" ng-if="$index >= min && $index < max">
+                <li ng-repeat="single in drives | orderBy:orderFunction:orderReverse | filter:searchText" ng-if="$index >= min && $index < max">
                     <div class="collapsible-header">
                       {{single.drivername}}
                       <a href='#deleteDriveModal' class="secondary-content" ng-click="addInputs(single)" modal>

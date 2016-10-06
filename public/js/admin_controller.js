@@ -22,7 +22,7 @@ app.controller('sign_in_controller', ["currentAuth", "Auth", "$scope","$location
         $scope.firebaseUser = firebaseUser;
         if(firebaseUser){
           console.log("Successfully signed in");
-          console.log(firebaseUser);
+          // console.log(firebaseUser);
           var userId = firebaseUser.uid;
           var userRef = firebase.database().ref().child("users").child(userId);
           $scope.user = $firebaseObject(userRef);
@@ -43,7 +43,6 @@ app.controller('sign_in_controller', ["currentAuth", "Auth", "$scope","$location
       });
   };
 }]);
-
           
 app.controller('main_controller', ["currentAuth", "Auth", "$scope", "$location", "$firebaseArray", "$firebaseObject",
    function(currentAuth, Auth, $scope, $location, $firebaseArray, $firebaseObject) {
@@ -165,12 +164,33 @@ app.controller('main_controller', ["currentAuth", "Auth", "$scope", "$location",
     //search filter
     $scope.orderReverse = true;
     $scope.orderBy = "start_drive";
+    $scope.type = "start_drive";
     $scope.types = ["drivername", "license", "phone", "email", "address", "rego", "make", "model", "start_drive", "finish_drive", "username"];
-
-    $scope.selectType = function(type){
-      $scope.orderBy = type;
+    $scope.typeChanged = function(type){
+       $scope.type = type;
     };
     
+    //Custom Order of ng-repeat
+    $scope.orderFunction = function(value){
+      if($scope.type == "start_drive" && value.start_drive != null){
+        
+        var day = value.start_drive.split('/')[0];
+        var month = value.start_drive.split('/')[1];
+        var year = value.start_drive.split('/')[2].split(' ')[0];
+        var time = value.start_drive.split('/')[2].split(' ')[1];
+        var date = year+month+day;
+        return date;
+      }else if($scope.type == "finish_drive" && value.finish_drive != null){
+        var day = value.finish_drive.split('/')[0];
+        var month = value.finish_drive.split('/')[1];
+        var year = value.finish_drive.split('/')[2].split(' ')[0];
+        var time = value.finish_drive.split('/')[2].split(' ')[1];
+        var date = year+month+day;
+        return date;
+      }else{
+        return value[$scope.type];
+      }
+    };
     $scope.makes = ["Audi", "VW", "Mazda", "Jaguar", "Land Rover", "Hyundai", "Chrysler", "Jeep", "Dodge", "Isuzu"];
 
     $scope.selectMake = function(make){
@@ -193,6 +213,44 @@ app.controller('main_controller', ["currentAuth", "Auth", "$scope", "$location",
     
     $scope.cancel = getData();
     
+    $scope.linkto = function (path) {
+      $location.path(path);
+    };
+    
+    //Date picker
+    var currentTime = new Date();
+    $scope.currentTime = currentTime;
+    $scope.month = ['Januar', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    $scope.monthShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    $scope.weekdaysFull = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    $scope.weekdaysLetter = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    // $scope.disable = [false, 1, 7];
+    $scope.today = 'Today';
+    $scope.clear = 'Clear';
+    $scope.close = 'Close';
+    // var days = 15;
+// $scope.minDate = (new Date($scope.currentTime.getTime() - ( 1000 * 60 * 60 *24 * days ))).toISOString();
+// $scope.maxDate = (new Date($scope.currentTime.getTime() + ( 1000 * 60 * 60 *24 * days ))).toISOString();
+    $scope.onStart = function () {
+        // console.log('onStart');
+    };
+    $scope.onRender = function () {
+        // console.log('onRender');
+    };
+    $scope.onOpen = function () {
+        // console.log('onOpen');
+    };
+    $scope.onClose = function () {
+        // console.log('onClose');
+        
+    };
+    $scope.onSet = function () {
+        // console.log('onSet');
+        $scope.searchText = $scope.currentTime;
+    };
+    $scope.onStop = function () {
+        // console.log('onStop');
+    };
 }]);
 
 
@@ -306,10 +364,13 @@ app.controller('users_controller', ["$scope",  "$location", "currentAuth", "Auth
       }
     };
     
+    $scope.linkto = function (path) {
+      $location.path(path);
+    };
 }]);
 
-app.controller('settings_controller', ["$scope", "Auth", "currentAuth", "$firebaseArray", "$firebaseObject",
-  function($scope, Auth, currentAuth, $firebaseArray, $firebaseObject) {
+app.controller('settings_controller', ["$scope", "Auth", "currentAuth", "$firebaseArray", "$firebaseObject", "$location",
+  function($scope, Auth, currentAuth, $firebaseArray, $firebaseObject, $location) {
     
     //get user's info for side nav
     var auth = Auth;
@@ -320,6 +381,9 @@ app.controller('settings_controller', ["$scope", "Auth", "currentAuth", "$fireba
       auth.$signOut();
     };
     
+    $scope.linkto = function (path) {
+      $location.path(path);
+    };
     
 }]);
 

@@ -16,52 +16,69 @@
                         <tbody>
                           <tr>
                             <td>Name:</td>
-                            <td>James Frizelle</td>
+                            <td>{{drive.drivername}}</td>
                           </tr>
                           <tr>
-                            <td>Licence Number:</td>
-                            <td>12345</td>
+                            <td>License Number:</td>
+                            <td>{{drive.licence}}</td>
                           </tr>
                           <tr>
                             <td>Phone Number:</td>
-                            <td>04321567</td>
+                            <td>{{drive.phone}}</td>
                           </tr>
                           <tr>
                             <td>Email:</td>
-                            <td>jamesfrizelle@example.com</td>
+                            <td>{{drive.email}}</td>
                           </tr>
                           <tr>
                             <td>Mailing Address:</td>
-                            <td>Example Street, Southport, QLD 4215</td>
+                            <td>{{drive.address}}</td>
                           </tr>
                           <tr>
                             <td>Car Make:</td>
-                            <td>Audi</td>
+                            <td>{{drive.make}}</td>
                           </tr>
                           <tr>
-                            <td>Car Model</td>
-                            <td>A1</td>
+                            <td>Car Model:</td>
+                            <td>{{drive.model}}</td>
                           </tr>
                           <tr>
-                            <td>Name</td>
-                            <td>rego123</td>
+                            <td>Rego Number:</td>
+                            <td>{{drive.rego}}</td>
                           </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="row">
                   <!-- Modal Trigger -->
-                  <a class="waves-effect waves-light btn-large yellow black-text" style="margin:20px;" href="#driverDetailsModal" modal>Confirm & Start</a>
+                  <a class="waves-effect waves-light btn-large yellow black-text" style="margin:20px;"  href="#startDriveModal" ng-click="onClickSubmitDrive()"  modal>Confirm & Start</a>
                   <!-- Modal Structure -->
-                  <div id="driverDetailsModal" class="modal">
+                  <div id="startDriveModal" class="modal">
+                    <span ng-show="loading">
+                      <div class="modal-content">
+                          <div class="preloader-wrapper big active">
+                            <div class="spinner-layer spinner-blue-only">
+                              <div class="circle-clipper left">
+                                <div class="circle"></div>
+                              </div><div class="gap-patch">
+                                <div class="circle"></div>
+                              </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                    </span>
+                    <span ng-hide="loading">
                       <div class="modal-content">
                           <h4>Submission Successful</h4>
                           <p>All OK, Let's start the test drive</p>
                           <i class="medium material-icons circle green accent-4" style="margin:20px; color:white;">done</i>
                       </div>
                       <div class="modal-footer">
-                          <a  class=" modal-action modal-close waves-effect waves-green btn-flat" href="#/drive">OK</a>
+                          <a  class=" modal-action modal-close waves-effect waves-green btn-flat" ng-click="onClickStartDrive()">OK</a>
                       </div>
+                    </span>
                   </div>
                 </div>
             </div>

@@ -10,10 +10,10 @@
                         <h5>Test Results:</h5>
                     </div>
                     <div class="row">
-                         <h6 class="">Start Time: 00:00:00</h6>
+                         <h6 class="">Start Time: {{start_time}}</h6>
                     </div>
                     <div class="row">
-                        <h6 class="">Finish Time: 00:00:00</h6> 
+                        <h6 class="">Finish Time: {{finish_time}}</h6> 
                     </div>
                     <div class="row">
                         <h5>Rate this car:</h5>
@@ -34,17 +34,34 @@
                     </div>
                     <div class="row">
                         <!-- Modal Trigger -->
-                        <a class="waves-effect waves-light btn-large yellow black-text" style="margin:20px;" href="#reviewModal" ng-click="submitReview()" modal>Submit</a>
+                        <a class="waves-effect waves-light btn-large yellow black-text" style="margin:20px;" href="#reviewModal" ng-click="onClickSubmitReview()" modal>Submit</a>
                         <!-- Modal Structure -->
                         <div id="reviewModal" class="modal">
-                            <div class="modal-content">
-                                <h4>Thanks for taking the test drive</h4>
-                                <p>We sent an email with the Agreement</p>
-                                <i class="medium material-icons circle green accent-4" style="margin:20px; color:white;">done</i>
-                            </div>
-                            <div class="modal-footer">
-                                <a  class=" modal-action modal-close waves-effect waves-green btn-flat" href="#/sign_in">OK</a>
-                            </div>
+                            <span ng-hide="loading">
+                                <div class="modal-content">
+                                    <h4>Thanks for taking the test drive</h4>
+                                    <p>We sent an email with the Agreement</p>
+                                    <i class="medium material-icons circle green accent-4" style="margin:20px; color:white;">done</i>
+                                </div>
+                                <div class="modal-footer">
+                                    <a  class=" modal-action modal-close waves-effect waves-green btn-flat" ng-click="onClickComplete()">OK</a>
+                                </div>
+                            </span>
+                            <span ng-show="loading">
+                                <div class="modal-content">
+                                  <div class="preloader-wrapper big active">
+                                    <div class="spinner-layer spinner-blue-only">
+                                      <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                      </div><div class="gap-patch">
+                                        <div class="circle"></div>
+                                      </div><div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                              </div>
+                            </span>
                         </div>
                     </div>
                 </div>

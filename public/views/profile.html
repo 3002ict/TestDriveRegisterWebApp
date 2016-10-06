@@ -13,18 +13,18 @@
         <div class="card-content" style="height:300px">
               <div style="position:relative; top: -200px; margin-bottom: -100px">
                 <div class="row"><i class="large material-icons" style="color:white; ">account_circle</i></div>
-                <div class="row"><span class=" white-text">Name</span></div>
+                <div class="row"><span class=" white-text">{{user.name}}</span></div>
               </div>
               <div class="row">
                 <div class="col s2"><i class="material-icons">email</i></div>
-                <div class="col s10 left-align">Email Address</div>
+                <div class="col s10 left-align">{{user.email}}</div>
               </div>
               <div class="row">
                 <div class="col s2"><i class="material-icons">phone</i></div>
-                <div class="col s10 left-align">Phone Number</div>
+                <div class="col s10 left-align">{{user.phone}}</div>
               </div>
               <div class="row right">
-                <a class="btn-floating btn-large waves-effect waves-light" href="#/driver_details"><i class="material-icons">directions_car</i></a>
+                <a class="btn-floating btn-large waves-effect waves-light" ng-click="linkto('/driver_details')"><i class="material-icons">directions_car</i></a>
               </div>
         </div>
       </div>

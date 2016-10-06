@@ -10,14 +10,14 @@
             <div class="card-content">
                 <form>
                     <p>
-                      <input type="checkbox" class="filled-in" id="filled-in-box"  ng-click="accept = !accept"/>
+                      <input type="checkbox" class="filled-in" id="filled-in-box"  ng-click="onClickAccept()"/>
                       <label for="filled-in-box">I accept the terms in the Agreement</label>
                     </p>
                 </form>
             </div>
             <div class="card-action">
               <a href="#/driver_details" class="grey-text">Decline</a>
-              <a href="#/start" ng-show="accept">Continue</a>
+              <a ng-click="onClickContinue()" href="javascript:void(0)" ng-show="accept">Continue</a>
             </div>
         </div>
       </div>

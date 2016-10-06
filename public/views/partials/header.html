@@ -15,11 +15,11 @@
       <a href="#!name"><span class="white-text name">{{user.name}}</span></a>
       <a href="#!email"><span class="white-text email">{{user.email}}</span></a>
     </div></li>
-    <li><a href="#/"><i class="material-icons">dns</i>Database</a></li>
+    <li><a ng-click="linkto('/')"><i class="material-icons">dns</i>Database</a></li>
     <li><div class="divider"></div></li>
-    <li><a href="#/users"><i class="material-icons">perm_identity</i>Users</a></li>
+    <li><a ng-click="linkto('/users')"><i class="material-icons">perm_identity</i>Users</a></li>
     <li><div class="divider"></div></li>
-    <li><a href="#/settings"><i class="material-icons">settings</i>Settings</a></li>
+    <li><a ng-click="linkto('/settings')"><i class="material-icons">settings</i>Settings</a></li>
     <li><div class="divider"></div></li>
     <li><a href="javascript:void(0);" ng-click="signout()"><i class="material-icons">exit_to_app</i>Sign Out</a></li>
 </ul>
