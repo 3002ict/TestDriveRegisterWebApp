@@ -1,7 +1,47 @@
 <!--Header-->
 <header ng-include="'views/partials/header.html'"></header>
 <main>
-    No contents yet
+    <div class="row">
+    <div class="col s12 m8">
+      <div class="card">
+        <div class="card-content">
+            <div class="row">
+              <span class="card-title">Settings:</span>
+            </div>
+            <div class="row">
+                <h5>Update Agreement Image (.jpg .png)</h3>
+            </div>
+            <div class="row">
+                <form action="#">
+                    <div class="file-field input-field">
+                      <div class="btn">
+                        <span>File</span>
+                        <input type="file" ng-model-instant onchange="angular.element(this).scope().imageUpload(event)" multiple >
+                      </div>
+                      <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                      </div>
+                    </div>
+                    <div class="progress">
+                      <div class="determinate" style="width: {{progress}}%"></div>
+                    </div>
+                 </form>
+            </div>
+            <div class="row">
+                <img class="materialboxed" width="150" ng-src="{{preview}}">
+            </div>
+            <div class="row">
+                <button class="btn waves-effect waves-light yellow black-text" type="submit" name="action" ng-click="uploadImage()">Submit
+                    <i class="material-icons right ">send</i>
+                </button>
+            </div>
+            <div class="row">
+              <p ng-if="error">Error: <strong>{{ error }}</strong></p>
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
 </main>
 <!--Footer-->
 <footer ng-include="'views/partials/footer.html'" class="page-footer purple darken-3"></footer>

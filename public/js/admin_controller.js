@@ -358,6 +358,7 @@ app.controller('users_controller', ["$scope",  "$location", "currentAuth", "Auth
             secondaryApp.auth().signOut();
           }).catch(function(error) {
             Materialize.toast(error, 4000);
+            secondaryApp.auth().signOut();
           });
       }else{
         Materialize.toast("Invalid user data or you don't have permission to create a new user", 4000)
@@ -366,6 +367,32 @@ app.controller('users_controller', ["$scope",  "$location", "currentAuth", "Auth
     
     $scope.linkto = function (path) {
       $location.path(path);
+    };
+    
+    $scope.deleteUser = function(){
+      var email = $scope.email;
+      var password = $scope.password;
+      console.log(email + password);
+      secondaryApp.auth().signInWithEmailAndPassword(email, password).then(function(firebaseUser) {
+        if(firebaseUser){
+          console.log("Successfully signed in");
+          firebase.database().ref().child("users").child(firebaseUser.uid).remove();
+        
+          firebaseUser.delete().then(function() {
+            // User deleted.
+            console.log("User was deleted.");
+          }, function(error) {
+            // An error happened.
+            console.log(error);
+          });
+        }else{
+          console.log("Failed to sign in");
+        }
+        secondaryApp.auth().signOut();
+      }).catch(function(error) {
+        $scope.error = error;
+        secondaryApp.auth().signOut();
+      });
     };
 }]);
 
@@ -377,12 +404,53 @@ app.controller('settings_controller', ["$scope", "Auth", "currentAuth", "$fireba
     var userId = currentAuth.uid;
     var userRef = firebase.database().ref().child("users").child(userId);
     $scope.user = $firebaseObject(userRef);
+    var storageRef = storage.ref("agreement/agreement.jpg");
+    
+    
     $scope.signout = function(){
       auth.$signOut();
     };
     
     $scope.linkto = function (path) {
       $location.path(path);
+    };
+    
+    var firstFile;
+    $scope.imageUpload = function(event){
+      firstFile = event.target.files[0]; // get the first file uploaded
+      var files = event.target.files; //FileList object
+       var reader = new FileReader();
+       reader.onload = $scope.imageIsLoaded; 
+       reader.readAsDataURL(firstFile);
+    };
+    
+    $scope.stepsModel = [];
+    
+    $scope.imageIsLoaded = function(e){
+        $scope.$apply(function() {
+            $scope.preview = e.target.result;
+        });
+    };
+    
+    $scope.progress = 0;
+    $scope.uploadImage = function(){
+      $scope.progress = 0;
+      
+      var uploadTask = storageRef.put(firstFile);
+      uploadTask.on('state_changed', function progress(snapshot) {
+         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+         $scope.progress = progress;
+         $scope.$apply();
+          // console.log('Upload is ' + progress + '% done');
+      }, function(error) {
+        // Handle unsuccessful uploads
+        Materialize.toast(error, 4000);
+      }, function() {
+        // Handle successful uploads on complete
+        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+        var $toastContent = $('<span><i class="material-icons left">done</i>Image was successfully uploaded!</span>');
+        Materialize.toast($toastContent, 4000);
+      });
     };
     
 }]);

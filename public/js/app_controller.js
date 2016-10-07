@@ -127,7 +127,9 @@ app.value('Drive', {
 
 
 
-app.controller('agreement_controller', function(){});
+app.controller('agreement_controller', ["$scope", "loadImage", function($scope, loadImage){
+  $scope.agreementImageURL = loadImage;
+}]);
 
 
 ///////////////////////
@@ -249,8 +251,8 @@ app.controller('driver_details_controller', ["currentAuth", "Auth", "$scope","$l
 /////////////////////////
 // Agreement Controller//
 /////////////////////////
-app.controller('agreement_page_controller', ["currentAuth", "Auth", "$scope","$location", "$firebaseObject", "currentDrive", "UserService",
-   function(currentAuth, Auth, $scope, $location, $firebaseObject, currentDrive, UserService) {
+app.controller('agreement_page_controller', ["currentAuth", "Auth", "$scope","$location", "$firebaseObject", "currentDrive", "UserService", "loadImage",
+   function(currentAuth, Auth, $scope, $location, $firebaseObject, currentDrive, UserService, loadImage) {
     
     //initialize values
     $scope.backButton = "keyboard_backspace";
@@ -260,6 +262,8 @@ app.controller('agreement_page_controller', ["currentAuth", "Auth", "$scope","$l
     $scope.appName = "Agreement";
     $scope.accept = false;
     $scope.signout = UserService.signOut;
+    $scope.agreementImageURL = loadImage;
+   
   
     //Check box
     $scope.onClickAccept = function(){

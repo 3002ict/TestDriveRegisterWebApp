@@ -98,6 +98,34 @@
     </div>
 </div>
 
+<!-- Modal Structure for Delete -->
+<div id="deleteUserModal" class="modal">
+    <div class="modal-content">
+        <h4>Delete user</h4>
+        <div class="row">
+          Type email and password
+          <form class="col s12">
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="icon_prefix" type="text" ng-model="email">
+                <label for="icon_prefix">Email</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="icon_prefix" type="password" ng-model="password">
+                <label for="icon_prefix">Password</label>
+              </div>
+            </div>
+          </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:void(0);" ng-click="deleteUser()" class=" modal-action modal-close waves-effect waves-green btn-flat">DELETE</a>
+        <a href="javascript:void(0);" class=" modal-action modal-close waves-effect waves-green btn-flat">CANCEL</a>
+    </div>
+</div>
+
 <div class="row">
     <div class="col s12 m8">
       <div class="card">
@@ -161,6 +189,9 @@
                 <li ng-repeat="single in users | orderBy:orderBy:orderReverse | filter:searchText" ng-if="$index >= min && $index < max">
                     <div class="collapsible-header">
                       {{single.name}}
+                      <a href='#deleteUserModal' class="secondary-content" ng-click="addInputs(single)" modal>
+                        <i class="material-icons" style="color: #d50000;">delete</i>
+                      </a>
                       <a class='secondary-content' href='#updateUserModal' ng-click="addInputs(single)" modal>
                         <i class="material-icons">mode_edit</i>
                       </a>

@@ -3,7 +3,7 @@ var config = {
 apiKey: "AIzaSyCzCg5-nEGLkQKDwSrWvMN9aKjL7XecdR8",
 authDomain: "testdriveregister-4ef26.firebaseapp.com",
 databaseURL: "https://testdriveregister-4ef26.firebaseio.com",
-storageBucket: "testdriveregister-4ef26.appspot.com",
+storageBucket: "gs://testdriveregister-4ef26.appspot.com"
 };
 firebase.initializeApp(config);
 
@@ -16,6 +16,9 @@ var app = angular.module('App', ['ngTouch','ngRoute', 'ui.materialize', 'chart.j
 
 // Get a reference to the database service
 var database = firebase.database();
+console.log(firebase);
+var storage = firebase.storage();
+
 app.run(["$rootScope", "$location", function($rootScope, $location) {
   $rootScope.$on("$routeChangeError", function(event, next, previous, error) {
     // We can catch the error thrown when the $requireSignIn promise is rejected
@@ -124,7 +127,26 @@ app.config(["$routeProvider", '$locationProvider', function($routeProvider, $loc
                       "currentDrive": ["DriveService", function(DriveService){
                         DriveService.checkCurrentPage();
                         return DriveService;
-                      }]
+                      }],
+                      "loadImage":function($q){
+                        //asyc for loading image url from firebase
+                        var deferred = $q.defer();
+                           var pathReference = storage.ref('agreement/agreement.jpg');
+    
+                          pathReference.getDownloadURL().then(function(url) {
+                            // Get the download URL for 'images/stars.jpg'
+                            // This can be inserted into an <img> tag
+                            // This can also be downloaded directly
+                            deferred.resolve(url);
+                            
+                          }).catch(function(error) {
+                            // Handle any errors
+                            console.log(error);
+                            deferred.reject(error);
+                          });
+                          
+                          return deferred.promise;
+                      }
                     }
                 })
                 .when('/start', {
@@ -183,7 +205,28 @@ app.config(["$routeProvider", '$locationProvider', function($routeProvider, $loc
                 })
                 .when('/agreement', {
                   templateUrl: 'views/agreement.html',
-                  controller: 'agreement_controller'
+                  controller: 'agreement_controller',
+                  resolve: {
+                  "loadImage":function($q){
+                        //asyc for loading image url from firebase
+                        var deferred = $q.defer();
+                           var pathReference = storage.ref('agreement/agreement.jpg');
+    
+                          pathReference.getDownloadURL().then(function(url) {
+                            // Get the download URL for 'images/stars.jpg'
+                            // This can be inserted into an <img> tag
+                            // This can also be downloaded directly
+                            deferred.resolve(url);
+                            
+                          }).catch(function(error) {
+                            // Handle any errors
+                            console.log(error);
+                            deferred.reject(error);
+                          });
+                          
+                          return deferred.promise;
+                      }
+                    }
                 })
                 .otherwise({
                     // default page
