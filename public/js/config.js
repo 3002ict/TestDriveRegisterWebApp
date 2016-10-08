@@ -16,7 +16,6 @@ var app = angular.module('App', ['ngTouch','ngRoute', 'ui.materialize', 'chart.j
 
 // Get a reference to the database service
 var database = firebase.database();
-console.log(firebase);
 var storage = firebase.storage();
 
 app.run(["$rootScope", "$location", function($rootScope, $location) {

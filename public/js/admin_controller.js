@@ -44,8 +44,8 @@ app.controller('sign_in_controller', ["currentAuth", "Auth", "$scope","$location
   };
 }]);
           
-app.controller('main_controller', ["currentAuth", "Auth", "$scope", "$location", "$firebaseArray", "$firebaseObject",
-   function(currentAuth, Auth, $scope, $location, $firebaseArray, $firebaseObject) {
+app.controller('main_controller', ["currentAuth", "Auth", "$scope", "$location", "$firebaseArray", "$firebaseObject", "$http",
+   function(currentAuth, Auth, $scope, $location, $firebaseArray, $firebaseObject, $http) {
     var auth = Auth;
     $scope.rate_sum = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     $scope.rate_num = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -56,9 +56,6 @@ app.controller('main_controller', ["currentAuth", "Auth", "$scope", "$location",
     var userRef = firebase.database().ref().child("users").child(userId);
     $scope.user = $firebaseObject(userRef);
     
-    //get list of test drive data
-    getData();
-
     //update rating data
     function updateRatingData(child){
       $scope.rate_num[$scope.rating_labels.indexOf(child.val().make)] += 1;
@@ -67,6 +64,13 @@ app.controller('main_controller', ["currentAuth", "Auth", "$scope", "$location",
       $scope.rating_data[0][num] = parseFloat($scope.rate_sum[num])/parseFloat($scope.rate_num[num]);
     }
     
+    var currentTime = new Date();
+    var currentDate = currentTime.getDate();
+    var currentMonth = currentTime.getMonth()+1;
+    var currentYear = currentTime.getFullYear();
+    
+    var sixMonth = 6*30;
+    $scope.oldDrives = [];
     //function to get 600 test drive data
     function getData(){
       $scope.preLoad = true;
@@ -82,6 +86,7 @@ app.controller('main_controller', ["currentAuth", "Auth", "$scope", "$location",
          $scope.error = err;
          $scope.preLoad = false;
       });
+      
         
         //update rating data when child was added
         drivesRef.on('child_added', function(childSnapshot, prevChildKey) {
@@ -89,6 +94,18 @@ app.controller('main_controller', ["currentAuth", "Auth", "$scope", "$location",
             if(childSnapshot.val().rate != null){
                 updateRatingData(childSnapshot);
             }
+            
+            //Check data was created six month ago
+            var drive = childSnapshot.val();
+            var date = drive.start_drive.split('/')[0];
+            var month = drive.start_drive.split('/')[1];
+            var year = drive.start_drive.split('/')[2].split(' ')[0];
+            var days = (currentDate - parseInt(date)) + (currentMonth - parseInt(month))*30 + (currentYear - parseInt(year))*365;
+            if(days >= sixMonth){
+              drive.key = childSnapshot.key;
+              $scope.oldDrives.push(drive);
+            }
+            
         });
         
         //update rating data when child was changed
@@ -154,7 +171,6 @@ app.controller('main_controller', ["currentAuth", "Auth", "$scope", "$location",
       $scope.min = (page - 1) * 7;
       $scope.max = page * 7;
     };
-    
     
     
     $scope.addInputs = function(data){
@@ -251,6 +267,45 @@ app.controller('main_controller', ["currentAuth", "Auth", "$scope", "$location",
     $scope.onStop = function () {
         // console.log('onStop');
     };
+    
+    $scope.removeOldData = function(data, index){
+      firebase.database().ref().child("drives").child(data.key).update({status: "beingRemoved"});
+      $http({
+        method: 'GET',
+        url: 'https://test-drive-mailer.herokuapp.com/delete?key=' + data.key
+      }).then(function successCallback(response) {
+          // this callback will be called asynchronously
+          // when the response is available
+          console.log(response);
+      }, function errorCallback(response) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+          console.log(response);
+      });
+      Materialize.toast("Email was sent.", 4000);
+      $scope.oldDrives.splice(index, 1);
+    };
+    
+    $scope.removeAllOldDrives = function(){
+      $scope.oldDrives.forEach(function(item, index){
+        firebase.database().ref().child("drives").child(item.key).update({status: "beingRemoved"});
+        $http({
+          method: 'GET',
+          url: 'https://test-drive-mailer.herokuapp.com/delete?key=' + item.key
+        }).then(function successCallback(response) {
+            // this callback will be called asynchronously
+            // when the response is available
+            console.log(response);
+        }, function errorCallback(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            console.log(response);
+        });
+      });
+      $scope.oldDrives = [];
+      Materialize.toast("All data removed", 4000);
+    };
+    
 }]);
 
 
