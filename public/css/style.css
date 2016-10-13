@@ -85,3 +85,16 @@ main.app{
 span.thumb{
   display: none;
 }
+
+.frizelles-blue{
+  background-color: #035294 !important;
+}
+
+.frizelles-yellow{
+  background-color: #fad234 !important;
+}
+
+.profile-background-img{
+  -webkit-filter: brightness(50%);
+  filter:brightness(50%);  
+}

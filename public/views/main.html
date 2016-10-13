@@ -85,11 +85,11 @@
 </div>
 
 <div class="row">
-    <div class="col s12 m8">
+    <div class="col s12 m7">
       <div class="card">
         <div class="card-content">
           <div class="col right">
-              <a class="btn-floating waves-effect waves-light" ng-click="linkto('/profile')"><i class="material-icons">add</i></a>
+              <a class="btn-floating waves-effect waves-light frizelles-yellow" ng-click="linkto('/profile')"><i class="material-icons">add</i></a>
           </div>        
             <div class="row">
               <span class="card-title">Test Drive:</span>
@@ -214,18 +214,19 @@
         </div>
       </div>
     </div>
-    <div class="row">
-        <div class="col s12 m4">
+    <!--PI Chart-->
+    <div class="col s12 m5">
           <div class="card">
-            <div class="card-content">
+            <div class="card-content" >
                 <span class="card-title">Car Make:</span>
-                <canvas id="pie" class="chart chart-pie"
-                    chart-data="pi_data" chart-labels="pi_labels" chart-colors="pi_colors" chart-options="pi_options">
-                </canvas>
+                  <canvas id="pie" class="chart chart-pie"
+                      chart-data="pi_data" chart-labels="pi_labels" chart-colors="pi_colors" chart-options="pi_options">
+                  </canvas>
             </div>
           </div>
-        </div>
-        <div class="col s12 m4">
+    </div>
+    <!--Bar Chart-->
+    <div class="col s12 m5">
           <div class="card">
             <div class="card-content">
                 <span class="card-title">Rating:</span>
@@ -234,48 +235,50 @@
                 </canvas>
             </div>
           </div>
-        </div>
     </div>
-</div>
-
-
-<div class="row">
-    <div class="col s12 m8">
+    <!--Data to be removed-->
+    <div class="col s12 m5">
       <div class="card">
         <div class="card-content">
           <span class="card-title">Data to be romoved (6 months):</span>
-          <div class="col right">
-              <a class="waves-effect waves-light btn" ng-click="removeAllOldDrives()"><i class="material-icons right">delete</i>Remove All</a>
-          </div> 
-          <ul class="collapsible popout" data-collapsible="accordion" watch>
-                <li ng-repeat="single in oldDrives">
-                    <div class="collapsible-header">
-                      {{single.drivername}}
-                      <a href='javascript:void(0);' class="secondary-content" ng-click="removeOldData(single, $index)">
-                        <i class="material-icons" style="color: #d50000;">delete</i>
-                      </a>
-                    </div>
-                    <div class="collapsible-body" >
-                        <p ng-model="single">
-                            Phone Number: {{single.phone}} <br>
-                            Email: {{single.email}} <br>
-                            License Number: {{single.licence}} <br>
-                            Maling Address: {{single.address}} <br>
-                            Start Drive: {{single.start_drive}}<br>
-                            Finish Drive: {{single.finish_drive}}<br>
-                            Car Make: {{single.make}}<br>
-                            Car Model: {{single.model}}<br>
-                            Rego Number: {{single.rego}}<br>
-                            Rate: {{single.rate}}<br>
-                            Comments: {{single.comments}}<br>
-                            User: {{single.username}}<br>
-                            Status: {{single.status}}<br>
-                        </p>
-                    </div>
-                </li>
-            </ul>
+          <div class="row">
+            <div class="col right">
+                <a class="waves-effect waves-light btn red" ng-click="removeAllOldDrives()"><i class="material-icons right">delete</i>Remove All</a>
+            </div> 
+          </div>
+          <div class="row">
+          
+            <ul class="collapsible popout" data-collapsible="accordion" watch>
+                  <li ng-repeat="single in oldDrives">
+                      <div class="collapsible-header">
+                        {{single.drivername}}
+                        <a href='javascript:void(0);' class="secondary-content" ng-click="removeOldData(single, $index)">
+                          <i class="material-icons" style="color: #d50000;">delete</i>
+                        </a>
+                      </div>
+                      <div class="collapsible-body" >
+                          <p ng-model="single">
+                              Phone Number: {{single.phone}} <br>
+                              Email: {{single.email}} <br>
+                              License Number: {{single.licence}} <br>
+                              Maling Address: {{single.address}} <br>
+                              Start Drive: {{single.start_drive}}<br>
+                              Finish Drive: {{single.finish_drive}}<br>
+                              Car Make: {{single.make}}<br>
+                              Car Model: {{single.model}}<br>
+                              Rego Number: {{single.rego}}<br>
+                              Rate: {{single.rate}}<br>
+                              Comments: {{single.comments}}<br>
+                              User: {{single.username}}<br>
+                              Status: {{single.status}}<br>
+                          </p>
+                      </div>
+                  </li>
+              </ul>
+            </div>
         </div>
+      </div>
     </div>
-</div>
+  </div>
 </main>
-<footer ng-include="'views/partials/footer.html'" class="page-footer purple darken-3"></footer>
+<footer ng-include="'views/partials/footer.html'" class="page-footer frizelles-blue"></footer>

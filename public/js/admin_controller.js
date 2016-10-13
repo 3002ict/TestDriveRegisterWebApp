@@ -27,34 +27,67 @@ app.controller('sign_in_controller', ["currentAuth", "Auth", "$scope","$location
           var userRef = firebase.database().ref().child("users").child(userId);
           $scope.user = $firebaseObject(userRef);
           $scope.user.$loaded(function(){
-            //check user is admin
-            if($scope.user.role != "admin"){
+            if(!$scope.user.enabled){
+              auth.$signOut();
+            }else if($scope.user.role != "admin"){//check user is admin
               $location.path("/profile");
-              // auth.$signOut();
-            }else{
+            }else{//general user
               $location.path("/");
             }
           });
         }else{
           console.log("Failed to sign in");
+          $scope.error = "Failed to sign in";
         }
       }).catch(function(error) {
         $scope.error = error;
       });
   };
 }]);
+
+app.controller('password_reset_controller', ["$scope","$location", "$firebaseArray", "$firebaseObject",
+   function($scope, $location, $firebaseArray, $firebaseObject) {
+  
+  var auth = firebase.auth();
+  $scope.sendEmail = function(){
+      $scope.error = null;
+      var email = $scope.email;
+      auth.sendPasswordResetEmail(email).then(function() {
+        // Email sent.
+        Materialize.toast("Email was sent.", 4000);
+      }, function(error) {
+        // An error happened.
+        $scope.error = error;
+      });
+  };
+  
+  // $scope.linkto = function (path) {
+  //   console.log(path);
+  //   $location.path(path);
+  // };
+     
+}]);
           
 app.controller('main_controller', ["currentAuth", "Auth", "$scope", "$location", "$firebaseArray", "$firebaseObject", "$http",
    function(currentAuth, Auth, $scope, $location, $firebaseArray, $firebaseObject, $http) {
+    //get user's info
+    var userId = currentAuth.uid;
+    var userRef = firebase.database().ref().child("users").child(userId);
+    $scope.user = $firebaseObject(userRef);
+    //Check role of user
+    $scope.user.$loaded(function(){
+      if($scope.user.role != "admin"){
+        $location.path("/profile");
+      }
+    });
+    
+     
     var auth = Auth;
     $scope.rate_sum = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     $scope.rate_num = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     $scope.preLoad = true;
     
-    //get user's info
-    var userId = currentAuth.uid;
-    var userRef = firebase.database().ref().child("users").child(userId);
-    $scope.user = $firebaseObject(userRef);
+    
     
     //update rating data
     function updateRatingData(child){
@@ -142,7 +175,14 @@ app.controller('main_controller', ["currentAuth", "Auth", "$scope", "$location",
     
     $scope.pi_options = {
       legend: {
-            display: true
+            display: true,
+            position: "left",
+            fullWidth: true,
+            labels: {
+              boxWidth: 10,
+              fontSize: 12,
+              padding: 5
+            }
         }
     };
     
@@ -316,8 +356,15 @@ app.controller('users_controller', ["$scope",  "$location", "currentAuth", "Auth
     var userId = currentAuth.uid;
     var userRef = firebase.database().ref().child("users").child(userId);
     $scope.user = $firebaseObject(userRef);
-    getData();
+    //Check role of user
+    $scope.user.$loaded(function(){
+      if($scope.user.role != "admin"){
+        $location.path("/profile");
+      }
+    });
     
+    
+   
     //get 1000 user data
     function getData(){
       $scope.preLoad = true;
@@ -407,7 +454,8 @@ app.controller('users_controller', ["$scope",  "$location", "currentAuth", "Auth
                 name: $scope.newUser.name,
                 email: $scope.newUser.email,
                 phone: $scope.newUser.phone,
-                role: $scope.newUser.role
+                role: $scope.newUser.role,
+                enabled: true
             };
             firebase.database().ref().child("users").child(firebaseUser.uid).set(newUser);
             secondaryApp.auth().signOut();
@@ -449,16 +497,31 @@ app.controller('users_controller', ["$scope",  "$location", "currentAuth", "Auth
         secondaryApp.auth().signOut();
       });
     };
+    
+  $scope.enableUser = function(user){
+     var index = $scope.users.$indexFor(user.$id);
+    $scope.users[index].enabled = !$scope.users[index].enabled;
+    $scope.users.$save(index);
+   
+  };
+  
 }]);
 
 app.controller('settings_controller', ["$scope", "Auth", "currentAuth", "$firebaseArray", "$firebaseObject", "$location",
   function($scope, Auth, currentAuth, $firebaseArray, $firebaseObject, $location) {
-    
     //get user's info for side nav
     var auth = Auth;
     var userId = currentAuth.uid;
     var userRef = firebase.database().ref().child("users").child(userId);
     $scope.user = $firebaseObject(userRef);
+    //Check role of user
+    $scope.user.$loaded(function(){
+      if($scope.user.role != "admin"){
+        $location.path("/profile");
+      }
+    });
+    
+    //get storage reference
     var storageRef = storage.ref("agreement/agreement.jpg");
     
     
@@ -489,6 +552,7 @@ app.controller('settings_controller', ["$scope", "Auth", "currentAuth", "$fireba
     
     $scope.progress = 0;
     $scope.uploadImage = function(){
+      
       $scope.progress = 0;
       
       var uploadTask = storageRef.put(firstFile);

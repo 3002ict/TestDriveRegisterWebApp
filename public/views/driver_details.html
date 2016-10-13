@@ -47,18 +47,13 @@
               </div>
             </div>
             <div class="row">
-              <!-- Dropdown Trigger -->
               <div class="col s4">
-                State:
-                <a class='dropdown-button btn' href='javascript:void(0);' data-activates='stateDropdown' dropdown data-hover="false">
-                    {{currentState}}
-                </a>
-                <!-- Dropdown Structure -->
-                <ul id='stateDropdown' class='dropdown-content'>
-                  <span ng-repeat="state in states">
-                    <li><a href="javascript:void(0);" ng-click="selectState(state)">{{state}}</a></li>
-                  </span>
-                </ul>
+                <div input-field>
+                    <select  class="" ng-model="select.state" material-select watch>
+                        <option ng-repeat="state in states">{{state}}</option>
+                    </select>
+                    <label>State:</label>
+                </div>
               </div>
               <div class="input-field col s8">
                 <input id="icon_prefix" type="number" class="validate" ng-model="postcode">
@@ -73,17 +68,12 @@
             </div>
             <div class="row">
               <div class="col s4">
-                <!-- Dropdown Trigger -->
-                Car Make:
-                <a class='dropdown-button btn' href='javascript:void(0);' data-activates='carMakeDropdown' dropdown data-hover="false">
-                    {{drive.make}}
-                </a>
-                <!-- Dropdown Structure -->
-                <ul id='carMakeDropdown' class='dropdown-content'>
-                  <span ng-repeat="make in makes">
-                    <li><a href="javascript:void(0);" ng-click="selectMake(make)">{{make}}</a></li>
-                  </span>
-                </ul>
+                <div input-field>
+                    <select  class="" ng-model="drive.make" material-select watch>
+                        <option ng-repeat="make in makes">{{make}}</option>
+                    </select>
+                    <label>Car Make:</label>
+                </div>
               </div>
               <div class="input-field col s8">
                 <input id="icon_prefix" type="text" class="validate" ng-model="drive.model">
@@ -103,4 +93,4 @@
     </div>
   </div>
 </main>
-<footer ng-include="'views/partials/footer_app.html'" class="app purple darken-3"></footer>
+<footer ng-include="'views/partials/footer_app.html'" class="app frizelles-blue"></footer>

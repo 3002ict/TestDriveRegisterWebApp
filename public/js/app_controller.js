@@ -4,6 +4,7 @@ app.value('User', {
     name: null,
     email: null,
     phone: null,
+    resume: null,
     id: null
 })
 .factory('UserService', ['User', '$firebaseObject', '$location', function(User, $firebaseObject, $location){
@@ -24,7 +25,7 @@ app.value('User', {
             }
             return false;
         },
-        setUser: function(){
+        setUser: function(callback){
             var currentUser = firebase.auth().currentUser;
             var uid = currentUser.uid;
             var userRef = firebase.database().ref().child("users").child(uid);
@@ -35,6 +36,8 @@ app.value('User', {
                 User.id = uid;
                 User.email = user.email;
                 User.phone = user.phone;
+                User.resume = user.resume;
+                return callback();
             });
         },
         signOut: function(){
@@ -135,10 +138,14 @@ app.controller('agreement_controller', ["$scope", "loadImage", function($scope, 
 ///////////////////////
 // Profile Controller//
 ///////////////////////
-app.controller('profile_controller', ["currentAuth", "Auth", "$scope","$location", "$firebaseObject", "UserService",
-   function(currentAuth, Auth, $scope, $location, $firebaseObject, UserService) {
+app.controller('profile_controller', ["currentAuth", "Auth", "$scope","$location", "$firebaseObject", "UserService", "DriveService", "TimeService",
+   function(currentAuth, Auth, $scope, $location, $firebaseObject, UserService, DriveService, TimeService) {
     //load user info
-    UserService.setUser();
+    UserService.setUser(function onComplete(){
+        if($scope.user.resume != null){
+            $('#modal1').openModal();
+        }
+    });
     $scope.user = UserService.getUser();
     
     //initalize values
@@ -149,7 +156,38 @@ app.controller('profile_controller', ["currentAuth", "Auth", "$scope","$location
     $scope.appName = "Profile";
     $scope.signout = UserService.signOut;
     $scope.linkto = function (path) {
-      $location.path(path);
+        
+        $location.path(path);
+    };
+  
+  
+    $scope.continueDrive = function(){
+        
+        
+        var driveKey = Object.keys($scope.user.resume)[0];
+        
+        
+        if($scope.user.resume[driveKey].status == "started"){
+            // split string and create array.
+            var arr = $scope.user.resume[driveKey].start_drive.split(/[\s:/]/); 
+            //convert dd/MM/yyyy HH:mm:ss into Date object
+            var date = new Date(parseInt(arr[2]), parseInt(arr[1]) -1, parseInt(arr[0]), parseInt(arr[3]), parseInt(arr[4]), parseInt(arr[5]), 0);
+            TimeService.startTime = date;
+            DriveService.setValue('key', driveKey);
+            DriveService.setDrive($scope.user.resume);
+            DriveService.movePage("/drive");    
+        }else if($scope.user.resume[driveKey].status == "inProgress"){
+            DriveService.setValue('key', driveKey);
+            DriveService.setDrive($scope.user.resume);
+            DriveService.movePage("/review");   
+        }
+    };
+    
+    //remove uncompleted data
+    $scope.removeDrive = function(){
+        var updates = {};
+        updates['/users/' + UserService.getUser().id + '/resume/'] = null;
+        firebase.database().ref().update(updates);
     };
 
 }]);
@@ -169,12 +207,12 @@ app.controller('driver_details_controller', ["currentAuth", "Auth", "$scope","$l
     $scope.makes = ["Audi", "VW", "Mazda", "Jaguar", "Land Rover", "Hyundai", "Chrysler", "Jeep", "Dodge", "Isuzu"];
     $scope.drive.make = "Audi";
     $scope.states = ["QLD", "NSW", "VIC", "TAS", "SA", "WA", "NT", "ACT"];
-    $scope.currentState = "QLD";
-    
+    $scope.select = {};
+    $scope.select.state = "QLD";
+  
     //auto fill if user filled before
     if(!DriveService.isEmpty()){
         var drive = DriveService.getDrive();
-        console.log(drive);
         $scope.drive.drivername = drive.drivername;
         $scope.drive.licence = drive.licence;
         $scope.drive.phone = drive.phone;
@@ -185,21 +223,10 @@ app.controller('driver_details_controller', ["currentAuth", "Auth", "$scope","$l
         var address = drive.address.split(', ');
         $scope.street = address[0];
         $scope.suburb = address[1];
-        $scope.currentState = address[2].split(' ')[0];
+        $scope.select.state = address[2].split(' ')[0];
         $scope.postcode = parseInt(address[2].split(' ')[1]);
     }
     
-    
-
-    $scope.selectMake = function(make){
-      $scope.drive.make = make;
-    };
-    
-    
-    
-    $scope.selectState = function(state){
-        $scope.currentState = state;
-    };
  
     $scope.signout = UserService.signOut;
     
@@ -223,7 +250,7 @@ app.controller('driver_details_controller', ["currentAuth", "Auth", "$scope","$l
             $scope.error += '"Email" is required or valid';
             return;
         }
-        if(!$scope.street || !$scope.suburb || !$scope.currentState || !$scope.postcode){
+        if(!$scope.street || !$scope.suburb || !$scope.select.state || !$scope.postcode){
             $scope.error += '"Mailing Address" is required';
             return;
         }
@@ -240,7 +267,7 @@ app.controller('driver_details_controller', ["currentAuth", "Auth", "$scope","$l
             return;
         }
         
-        inputs.address = $scope.street + ", " + $scope.suburb + ", " + $scope.currentState + " " + $scope.postcode;
+        inputs.address = $scope.street + ", " + $scope.suburb + ", " + $scope.select.state + " " + $scope.postcode;
         DriveService.setDrive(inputs);
         DriveService.movePage("/agreement_page");
     };
@@ -284,7 +311,7 @@ app.controller('start_controller', ["currentAuth", "Auth", "$scope","$location",
    function(currentAuth, Auth, $scope, $location , $firebaseObject, currentDrive, UserService, TimeService, $timeout) {
   
     //load user data if empty
-    if(UserService.isEmpty())UserService.setUser();
+    if(UserService.isEmpty())UserService.setUser(function onComplete(){console.log("User set.")});
   
     //initialize values
     $scope.backButton = "keyboard_backspace";
@@ -307,8 +334,7 @@ app.controller('start_controller', ["currentAuth", "Auth", "$scope","$location",
         var drive = currentDrive.getDrive();
         // Get a key for a new post.
         var newDriveKey = firebase.database().ref().child('drives').push().key;
-        var driveRef = firebase.database().ref().child('drives').child(newDriveKey);
-        
+      
         currentDrive.setValue('key', newDriveKey);
        
         var driveData = {
@@ -326,8 +352,12 @@ app.controller('start_controller', ["currentAuth", "Auth", "$scope","$location",
             status: "started"
         };
         
+        var updates = {};
+        updates['/drives/' + newDriveKey] = driveData;
+        updates['/users/' + UserService.getUser().id + '/resume/' + newDriveKey] = driveData;
+      
         //upload data to firebase
-        driveRef.set(driveData, function onComplete(error){
+        firebase.database().ref().update(updates, function onComplete(error){
             if(error){
                 console.log(error);
                 $('#startDriveModal').closeModal();
@@ -394,13 +424,23 @@ app.controller('drive_controller', ["currentAuth", "Auth", "$scope", "$interval"
         var finishTimeString = TimeService.formatDate(finishTime);
         currentDrive.setValue('finish_drive', finishTimeString);
         var drive = currentDrive.getDrive();
-        var driveRef = firebase.database().ref().child('drives').child(drive.key);
-        driveRef.update({
-            finish_drive : finishTimeString,
-            status: "inProgress"
+        var updates = {};
+        updates['/drives/' + drive.key + '/finish_drive'] = finishTimeString;
+        updates['/drives/' + drive.key + '/status'] = "inProgress"; 
+        updates['/users/' + UserService.getUser().id + '/resume/' + drive.key + '/finish_drive'] = finishTimeString;
+        updates['/users/' + UserService.getUser().id + '/resume/' + drive.key + '/status'] = "inProgress";
+        firebase.database().ref().update(updates, function onComplete(error){
+            if(error){
+                console.log(error);
+                $('#finishModal').closeModal();
+                Materialize.toast(error, 4000);
+                return;
+            }else{
+                console.log("Successfully uploaded.");
+                currentDrive.movePage('/review');
+            }
         });
-        $('#finishModal').closeModal();
-        currentDrive.movePage('/review');
+        
     };
 }]);
 
@@ -453,12 +493,12 @@ app.controller('review_controller', ["currentAuth", "Auth", "$scope","$location"
     
     $scope.onClickSubmitReview = function(){
         $scope.loading = true;
-        var driveRef = firebase.database().ref().child('drives').child(drive.key);
-        driveRef.update({
-            rate : $scope.star,
-            comments: $scope.comments,
-            status: "pending"   
-        }, function onComplete(error){
+        var updates = {};
+        updates['/drives/' + drive.key + '/rate'] =  $scope.star;
+        updates['/drives/' + drive.key + '/comments'] = $scope.comments; 
+        updates['/drives/' + drive.key + '/status'] = "pending"; 
+        updates['/users/' + UserService.getUser().id + '/resume/'] = null;
+        firebase.database().ref().update(updates, function onComplete(error){
             if(error){
                 console.log(error);
                 $('#reviewModal').closeModal();
@@ -481,6 +521,7 @@ app.controller('review_controller', ["currentAuth", "Auth", "$scope","$location"
             $scope.loading = false;
             $scope.$apply();
         });
+        
     };
     
     $scope.onClickComplete = function(){

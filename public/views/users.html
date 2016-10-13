@@ -189,6 +189,15 @@
                 <li ng-repeat="single in users | orderBy:orderBy:orderReverse | filter:searchText" ng-if="$index >= min && $index < max">
                     <div class="collapsible-header">
                       {{single.name}}
+                      <!-- Switch -->
+                      <div class="switch secondary-content">
+                        <label>
+                          Disable
+                          <input type="checkbox" ng-click="enableUser(single)" ng-checked="single.enabled">
+                          <span class="lever"></span>
+                          Enable
+                        </label>
+                      </div>
                       <a href='#deleteUserModal' class="secondary-content" ng-click="addInputs(single)" modal>
                         <i class="material-icons" style="color: #d50000;">delete</i>
                       </a>
@@ -201,6 +210,7 @@
                             Email: {{single.email}} <br>
                             Phone Number: {{single.phone}} <br>
                             Role: {{single.role}}<br>
+                            Enable: {{single.enabled}}
                         </p>
                     </div>
                 </li>
@@ -224,4 +234,4 @@
 </div>
 </main>
 <!--Footer-->
-<footer ng-include="'views/partials/footer.html'" class="page-footer purple darken-3"></footer>
+<footer ng-include="'views/partials/footer.html'" class="page-footer frizelles-blue"></footer>

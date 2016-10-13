@@ -44,6 +44,10 @@ app.config(["$routeProvider", '$locationProvider', function($routeProvider, $loc
                       }]
                     }
                 })
+                .when('/password_reset',{
+                    templateUrl : 'views/password_reset.html',
+                    controller : 'password_reset_controller'
+                })
                 //Admin app
                 .when('/',{
                     templateUrl : 'views/main.html',
