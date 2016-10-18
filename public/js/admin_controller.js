@@ -28,8 +28,11 @@ app.controller('sign_in_controller', ["currentAuth", "Auth", "$scope","$location
           $scope.user = $firebaseObject(userRef);
           $scope.user.$loaded(function(){
             if(!$scope.user.enabled){
+              
               auth.$signOut();
+              $scope.error = {message: "Your account is currently disabled. Please contact administrator."};
             }else if($scope.user.role != "admin"){//check user is admin
+            console.log("Not admin");
               $location.path("/profile");
             }else{//general user
               $location.path("/");
@@ -37,7 +40,7 @@ app.controller('sign_in_controller', ["currentAuth", "Auth", "$scope","$location
           });
         }else{
           console.log("Failed to sign in");
-          $scope.error = "Failed to sign in";
+          $scope.error = {message: "Failed to sign in"};
         }
       }).catch(function(error) {
         $scope.error = error;

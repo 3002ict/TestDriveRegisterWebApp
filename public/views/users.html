@@ -188,14 +188,29 @@
             <ul class="collapsible popout" data-collapsible="accordion" watch>
                 <li ng-repeat="single in users | orderBy:orderBy:orderReverse | filter:searchText" ng-if="$index >= min && $index < max">
                     <div class="collapsible-header">
-                      {{single.name}}
+                      <span class="hide-on-small-only">
+                        {{single.name}}
+                      </span>
+                      <span class="hide-on-med-and-up">
+                        <span ng-if="single.name.length >= 5">
+                          {{single.name.substring(0, 5)}}...
+                        </span>
+                        <span ng-if="single.name.length < 5">
+                          {{single.name}}
+                        </span>
+                      </span>
+                      
                       <!-- Switch -->
                       <div class="switch secondary-content">
                         <label>
-                          Disable
+                          <span class="hide-on-small-only">
+                            Disable
+                          </span>
                           <input type="checkbox" ng-click="enableUser(single)" ng-checked="single.enabled">
                           <span class="lever"></span>
-                          Enable
+                          <span class="hide-on-small-only">
+                            Enable
+                          </span>
                         </label>
                       </div>
                       <a href='#deleteUserModal' class="secondary-content" ng-click="addInputs(single)" modal>

@@ -57,6 +57,7 @@ app.value('User', {
 app.factory('TimeService', function(){
     return {
         startTime: null,
+        finishTime: null,
         formatDate: function(date){
             var dd = ('0' + date.getDate()).slice(-2);
             var MM = ('0' + (date.getMonth() + 1)).slice(-2);
@@ -163,7 +164,7 @@ app.controller('profile_controller', ["currentAuth", "Auth", "$scope","$location
   
     $scope.continueDrive = function(){
         
-        
+        $('#modal1').closeModal();
         var driveKey = Object.keys($scope.user.resume)[0];
         
         
@@ -177,15 +178,30 @@ app.controller('profile_controller', ["currentAuth", "Auth", "$scope","$location
             DriveService.setDrive($scope.user.resume);
             DriveService.movePage("/drive");    
         }else if($scope.user.resume[driveKey].status == "inProgress"){
+            // split string and create array.
+            var arr = $scope.user.resume[driveKey].start_drive.split(/[\s:/]/);
+            var arr2 = $scope.user.resume[driveKey].finish_drive.split(/[\s:/]/);
+            //convert dd/MM/yyyy HH:mm:ss into Date object
+            var startTime = new Date(parseInt(arr[2]), parseInt(arr[1]) -1, parseInt(arr[0]), parseInt(arr[3]), parseInt(arr[4]), parseInt(arr[5]), 0);
+            var finishTime =  new Date(parseInt(arr2[2]), parseInt(arr2[1]) -1, parseInt(arr2[0]), parseInt(arr2[3]), parseInt(arr2[4]), parseInt(arr2[5]), 0);
+            TimeService.startTime = startTime;
+            TimeService.finishTime = finishTime;
             DriveService.setValue('key', driveKey);
             DriveService.setDrive($scope.user.resume);
             DriveService.movePage("/review");   
         }
+        
+        
     };
     
     //remove uncompleted data
     $scope.removeDrive = function(){
+        $('#modal1').closeModal();
+        
+        var driveKey = Object.keys($scope.user.resume)[0];
+        console.log(driveKey);
         var updates = {};
+        updates['/drives/' + driveKey] = null;
         updates['/users/' + UserService.getUser().id + '/resume/'] = null;
         firebase.database().ref().update(updates);
     };
@@ -422,6 +438,7 @@ app.controller('drive_controller', ["currentAuth", "Auth", "$scope", "$interval"
     $scope.onClickFinishDrive = function(){
         var finishTime = new Date();
         var finishTimeString = TimeService.formatDate(finishTime);
+        TimeService.finishTime = finishTime;
         currentDrive.setValue('finish_drive', finishTimeString);
         var drive = currentDrive.getDrive();
         var updates = {};
@@ -450,8 +467,8 @@ app.controller('drive_controller', ["currentAuth", "Auth", "$scope", "$interval"
 // Review Controller//
 //////////////////////
 
-app.controller('review_controller', ["currentAuth", "Auth", "$scope","$location", "$firebaseObject", "UserService", "currentDrive", "$http",
-   function(currentAuth, Auth, $scope, $location, $firebaseObject, UserService, currentDrive, $http) {
+app.controller('review_controller', ["currentAuth", "Auth", "$scope","$location", "$firebaseObject", "UserService", "currentDrive", "$http", "TimeService",
+   function(currentAuth, Auth, $scope, $location, $firebaseObject, UserService, currentDrive, $http, TimeService) {
   
     //initialize values
     $scope.backButton = "";
@@ -487,8 +504,10 @@ app.controller('review_controller', ["currentAuth", "Auth", "$scope","$location"
       }
     };
     var drive = currentDrive.getDrive();
-    $scope.start_time = drive.start_drive;
-    $scope.finish_time = drive.finish_drive;
+    
+    $scope.start_time = TimeService.formatDate(TimeService.startTime);
+    $scope.finish_time = TimeService.formatDate(TimeService.finishTime);
+   
     $scope.comments = "";
     
     $scope.onClickSubmitReview = function(){
