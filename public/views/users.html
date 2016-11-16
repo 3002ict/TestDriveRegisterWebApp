@@ -20,17 +20,14 @@
               </div>
             </div>
             <div class="row">
-              <!-- Dropdown Trigger -->
-              Role: 
-              <a class='dropdown-button btn' href='javascript:void(0);' data-activates='roleDropdown' dropdown data-hover="false">
-                  {{inputs.role}}
-              </a>
-              <!-- Dropdown Structure -->
-              <ul id='roleDropdown' class='dropdown-content'>
-                <span ng-repeat="role in roles">
-                  <li><a href="javascript:void(0);" ng-click="selectRole(role)">{{role}}</a></li>
-                </span>
-              </ul>
+                <div class="col s4">
+                   <label for="">Role:</label>
+                  <div input-field>
+                      <select class="" ng-model="inputs.role"  material-select watch>
+                          <option ng-repeat="role in roles">{{role}}</option>
+                      </select>
+                  </div>
+                </div>
             </div>
           </form>
         </div>
@@ -47,17 +44,25 @@
         <div class="row">
           <form class="col s12">
             <div class="row">
+              <div class="col s4">
+                   <label for="">Role:</label>
+                  <div input-field>
+                      <select class="" ng-model="newUser.role"  material-select watch>
+                          <option ng-repeat="newUserRole in newUserRoles">{{newUserRole}}</option>
+                      </select>
+                  </div>
+                </div>
               <!-- Dropdown Trigger -->
-              Role:
-              <a class='dropdown-button btn' href='javascript:void(0);' data-activates='newUserRoleDropdown' dropdown data-hover="false">
-                  {{newUser.role}}
-              </a>
+              <!--Role:-->
+              <!--<a class='dropdown-button btn' href='javascript:void(0);' data-activates='newUserRoleDropdown' dropdown data-hover="false">-->
+              <!--    {{newUser.role}}-->
+              <!--</a>-->
               <!-- Dropdown Structure -->
-              <ul id='newUserRoleDropdown' class='dropdown-content'>
-                <span ng-repeat="newUserRole in newUserRoles">
-                  <li><a href="javascript:void(0);" ng-click="selectNewUserRole(newUserRole)">{{newUserRole}}</a></li>
-                </span>
-              </ul>
+              <!--<ul id='newUserRoleDropdown' class='dropdown-content'>-->
+              <!--  <span ng-repeat="newUserRole in newUserRoles">-->
+              <!--    <li><a href="javascript:void(0);" ng-click="selectNewUserRole(newUserRole)">{{newUserRole}}</a></li>-->
+              <!--  </span>-->
+              <!--</ul>-->
             </div>
             <div class="row">
               <div class="input-field col s12" input-field>
@@ -127,12 +132,12 @@
 </div>
 
 <div class="row">
-    <div class="col s12 m8">
+    <div class="col s12 m10">
       <div class="card">
         <div class="card-content">
           <!-- Modal Trigger -->
           <div class="col right">
-              <a href="#addUserModal" class="btn-floating waves-effect waves-light" modal><i class="material-icons">add</i></a>
+              <a href="#addUserModal" class="btn-floating waves-effect waves-light frizelles-yellow" modal><i class="material-icons">add</i></a>
           </div>        
             <div class="row">
               <span class="card-title">Users:</span>
@@ -150,24 +155,17 @@
                     </div>
                 </nav>
             </div>
-            <div class="row center">
-              <div class="col s6">
-                <!-- Dropdown Trigger -->
-                <a class='dropdown-button btn' href='javascript:void(0);' data-activates='orderByDropdown' dropdown data-hover="false">
-                    <i class="material-icons left">subject</i>{{orderBy}}
-                </a>
-                <!-- Dropdown Structure -->
-                <ul id='orderByDropdown' class='dropdown-content'>
-                  <span  ng-repeat="type in types">
-                    <li><a href="javascript:void(0);" ng-click="selectType(type)">{{type}}</a></li>
-                  </span>
-                </ul>
-                
-              </div>
-              <div class="col s6">
+            <div class="row">
+                <label for="">Order by property:</label>
+                <div input-field>
+                    <select class="" ng-model="orderBy" ng-change="selectType(type)" material-select watch>
+                        <option ng-repeat="type in types">{{type}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
                   <input type="checkbox" class="filled-in" id="filled-in-box" checked="checked" ng-click="orderReverse = !orderReverse" />
                   <label for="filled-in-box">Reverse</label>
-              </div>
             </div>
             <div class="row center" ng-show="preLoad">
               <div class="preloader-wrapper big active">

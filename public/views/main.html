@@ -1,10 +1,46 @@
 <!--Header-->
 <header ng-include="'views/partials/header.html'"></header>
 <main>
+<!-- Modal Structure for completing test drive -->
+<div id="modalCompleteDrive" class="modal modal-fixed-footer">
+  <div class="modal-content">
+    <h4>Complete Test Drive</h4>
+    <div class="row">
+          <form class="col s12">
+            <div class="row">
+              <h5>Car Rating:</h5>
+              <div class="col s4">
+                <div input-field>
+                    <select class="browser-default" ng-model="inputs.rate" material-select watch>
+                        <option value="" disabled selected>Rate this car (3.0)</option>
+                        <option ng-repeat="rate in rates">{{rate}}</option>
+                    </select>
+                </div>
+              </div>
+              <div class="input-field col s4">
+                <input disabled value="&#47;5.0" id="disabled" type="text" class="validate black-text">
+              </div>
+              <!--<div class="col s4"><h4>&#47;5.0</h4></div>-->
+            </div>
+            <div class="row">
+              <h5>Comment:</h5>
+              <div class="input-field col s12">
+                <textarea id="textarea" class="materialize-textarea" ng-model="inputs.comments"></textarea>
+                <label for="textarea">Add a comment</label>
+              </div>
+            </div>
+          </form>
+        </div>
+  </div>
+  <div class="modal-footer">
+    <a href="javascript:void(0);" ng-click="completeDrive()" class=" modal-action modal-close waves-effect waves-green btn-flat">Done</a>
+    <a href="javascript:void(0);" ng-click="cancel()" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+  </div>
+</div>
 <!-- Modal Structure for Edit -->
 <div id="addDriveModal" class="modal modal-fixed-footer">
     <div class="modal-content">
-        <h4>Test Drive</h4>
+        <h4>Update Test Drive</h4>
         <div class="row">
           <form class="col s12">
             
@@ -45,17 +81,15 @@
               </div>
             </div>
             <div class="row">
-              <!-- Dropdown Trigger -->
-              Car Make:
-              <a class='dropdown-button btn' href='javascript:void(0);' data-activates='carMakeDropdown' dropdown data-hover="false">
-                  {{inputs.make}}
-              </a>
-              <!-- Dropdown Structure -->
-              <ul id='carMakeDropdown' class='dropdown-content'>
-                <span ng-repeat="make in makes">
-                  <li><a href="javascript:void(0);" ng-click="selectMake(make)">{{make}}</a></li>
-                </span>
-              </ul>
+              <div class="col s4">
+                <label>Car Make:</label>
+                <div input-field>
+                    <select class="browser-default" ng-model="inputs.make" material-select watch>
+                        <option ng-repeat="make in makes">{{make}}</option>
+                    </select>
+                    
+                </div>
+              </div>
               <div class="input-field col s8">
                 <input id="icon_prefix" type="text" class="validate" ng-model="inputs.model">
                 <label for="icon_prefix">Model</label>
@@ -65,6 +99,10 @@
         </div>
     </div>
     <div class="modal-footer">
+        <div ng-if="inputs.status!='completed'">
+          <!-- Modal Trigger for completing test drive -->
+          <a class="waves-effect waves-light btn frizelles-yellow modal-close" href="#modalCompleteDrive" modal>Complete</a>
+        </div>
         <a href="javascript:void(0);" ng-click="updateDrive()" class=" modal-action modal-close waves-effect waves-green btn-flat">ADD</a>
         <a href="javascript:void(0);" ng-click="cancel()" class=" modal-action modal-close waves-effect waves-green btn-flat">CANCEL</a>
     </div>
@@ -84,6 +122,9 @@
     </div>
 </div>
 
+
+
+<!--Main Contents-->
 <div class="row">
     <div class="col s12 m7">
       <div class="card">

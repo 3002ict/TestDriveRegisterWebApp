@@ -107,7 +107,19 @@ app.controller('main_controller', ["currentAuth", "Auth", "$scope", "$location",
     
     var sixMonth = 6*30;
     $scope.oldDrives = [];
+    
+    //set data for Charts
+    $scope.pi_data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    $scope.pi_labels = ["Audi", "VW", "Mazda", "Jaguar", "Land Rover", "Hyundai", "Chrysler", "Jeep", "Dodge", "Isuzu"];
+    $scope.rating_labels = ["Audi", "VW", "Mazda", "Jaguar", "Land Rover", "Hyundai", "Chrysler", "Jeep", "Dodge", "Isuzu"];
+    $scope.rating_series = ['Rate'];
+    $scope.rating_data = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ];
+    
+    
     //function to get 600 test drive data
+    getData();
     function getData(){
       $scope.preLoad = true;
       $scope.error = null;
@@ -126,6 +138,7 @@ app.controller('main_controller', ["currentAuth", "Auth", "$scope", "$location",
         
         //update rating data when child was added
         drivesRef.on('child_added', function(childSnapshot, prevChildKey) {
+           
             $scope.pi_data[$scope.pi_labels.indexOf(childSnapshot.val().make)] += 1;
             if(childSnapshot.val().rate != null){
                 updateRatingData(childSnapshot);
@@ -172,8 +185,8 @@ app.controller('main_controller', ["currentAuth", "Auth", "$scope", "$location",
     
     
     //Audi | VW |Mazda | Jaguar | Land Rover |Hyundai |Chrysler | Jeep | Dodge | Isuzu|
-    $scope.pi_labels = ["Audi", "VW", "Mazda", "Jaguar", "Land Rover", "Hyundai", "Chrysler", "Jeep", "Dodge", "Isuzu"];
-    $scope.pi_data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    
+   
     $scope.pi_colors = ['#d50000', '#6200ea', '#0091ea', '#00c853', '#ffd600', '#ff6d00', '#c51162', '#304ffe', '#3e2723', '#64dd17' ];
     
     $scope.pi_options = {
@@ -189,12 +202,7 @@ app.controller('main_controller', ["currentAuth", "Auth", "$scope", "$location",
         }
     };
     
-    $scope.rating_labels = ["Audi", "VW", "Mazda", "Jaguar", "Land Rover", "Hyundai", "Chrysler", "Jeep", "Dodge", "Isuzu"];
-    $scope.rating_series = ['Rate'];
-
-    $scope.rating_data = [
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ];
+    
     
     $scope.rating_options = {
       scales: {
@@ -251,10 +259,8 @@ app.controller('main_controller', ["currentAuth", "Auth", "$scope", "$location",
       }
     };
     $scope.makes = ["Audi", "VW", "Mazda", "Jaguar", "Land Rover", "Hyundai", "Chrysler", "Jeep", "Dodge", "Isuzu"];
+    $scope.rates = ["0", "0.5", "1.0", "1.5", "2.0", "2.5", "3.0", "3.5", "4.0", "4.5", "5.0"];
 
-    $scope.selectMake = function(make){
-      $scope.inputs.make = make;
-    };
     
     $scope.updateDrive = function(){
       if(isValid($scope.inputs)){
@@ -270,7 +276,66 @@ app.controller('main_controller', ["currentAuth", "Auth", "$scope", "$location",
       }
     };
     
-    $scope.cancel = getData();
+    $scope.completeDrive = function(){
+      //get current time
+      var date = new Date();
+      
+      //formating date
+      var dd = ('0' + date.getDate()).slice(-2);
+      var MM = ('0' + (date.getMonth() + 1)).slice(-2);
+      var yyyy = date.getFullYear();
+      var HH = ('0' + date.getHours()).slice(-2);
+      var mm = ('0' + date.getMinutes()).slice(-2);
+      var ss = ('0' + date.getSeconds()).slice(-2);
+      var stringDate = dd + "/" + MM + "/" + yyyy + " " + HH + ":" + mm + ":" + ss;
+      
+      //add finish time and change status
+      $scope.inputs.finish_drive = stringDate;
+      $scope.inputs.status = "pending";
+      
+      //add default value if user didn't select
+      if ($scope.inputs.rate == undefined) {
+        $scope.inputs.rate = "3.0";
+      }
+      
+      //update test drive data
+       if(isValid($scope.inputs)){
+        // change data and save it
+        var item = $scope.drives.$getRecord($scope.inputs.$id);
+        item = $scope.inputs;
+        $scope.drives.$save(item).then(function() {
+          // data has been saved to our database
+          //send a reqeust to mailer
+            $http({
+              method: 'GET',
+              url: 'https://test-drive-mailer.herokuapp.com?key=' + $scope.inputs.$id
+            }).then(function successCallback(response) {
+                // this callback will be called asynchronously
+                // when the response is available
+                console.log(response);
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                console.log(response);
+            });
+            
+            
+            var updates = {};
+            updates['/users/' + $scope.inputs.userId + '/resume/'] = null;
+            firebase.database().ref().update(updates);
+        });
+      }else{
+        Materialize.toast("Invalid Data", 4000);
+        getData();
+      }
+      
+      
+                
+    }
+    
+    $scope.cancel = function(){
+      getData();
+    };
     
     $scope.linkto = function (path) {
       $location.path(path);
@@ -369,12 +434,14 @@ app.controller('users_controller', ["$scope",  "$location", "currentAuth", "Auth
     
    
     //get 1000 user data
+    getData();
     function getData(){
       $scope.preLoad = true;
       $scope.error = null;
       var usersRef = firebase.database().ref().child("users");
       var usersQuery = usersRef.limitToFirst(1000);
       $scope.users = $firebaseArray(usersQuery);
+     
         
       $scope.users.$loaded(function() {
         $scope.preLoad = false;
@@ -418,6 +485,7 @@ app.controller('users_controller', ["$scope",  "$location", "currentAuth", "Auth
     };
     
     $scope.updateUser = function(){
+      console.log($scope.inputs);
       if(isValidUser($scope.inputs)){
         // change data and save it
         var item = $scope.users.$getRecord($scope.inputs.$id);
@@ -431,14 +499,13 @@ app.controller('users_controller', ["$scope",  "$location", "currentAuth", "Auth
       }
     };
     
-    $scope.cancel = getData();
+    $scope.cancel = function(){
+      getData();
+    };
     
     $scope.roles = ["user", "admin"];
     $scope.newUserRoles = ["user", "admin"];
     
-    $scope.selectRole = function(role){
-      $scope.inputs.role = role;
-    };
     
     $scope.newUser = {name: "", email: "", phone: "", role: "user"};
     $scope.selectNewUserRole = function(role){
